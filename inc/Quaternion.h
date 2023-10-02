@@ -6,6 +6,6 @@ typedef struct{
     double y;
     double z;
     double w;
-}dopoo_quaternionD;
+}dopoo_quatD;
 
 #endif

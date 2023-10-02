@@ -1,0 +1,55 @@
+#include <math.h>
+#include "../inc/Vec.h"
+
+
+double 
+dopoo_vec3D_dot(dopoo_vec3D v0, dopoo_vec3D v1)
+{
+	return (v0.x * v1.x +
+	        v0.y * v1.y +
+	        v0.z * v1.z);
+}
+
+dopoo_vec3D
+dopoo_vec3D_cross(dopoo_vec3D v0, dopoo_vec3D v1)
+{
+    dopoo_vec3D dst;
+    dst.x = v0.y * v1.z - v0.z * v1.y;
+    dst.y = v0.z * v1.x - v0.x * v1.z;
+    dst.z = v0.x * v1.y - v0.y * v1.z;
+    return dst;
+}
+
+double
+dopoo_vec3D_length(dopoo_vec3D v)
+{
+	return sqrt(v.x * v.x +
+		        v.y * v.y +
+		        v.z * v.z);
+}
+
+double
+dopoo_vec3D_lengthSqr(dopoo_vec3D v)
+{
+	return v.x * v.x + 
+           v.y * v.y + 
+           v.z * v.z;
+}
+
+dopoo_vec3D
+dopoo_vec3D_scale(dopoo_vec3D v, double scale)
+{
+	v.x *= scale;
+	v.y *= scale;
+	v.z *= scale;
+    return v;
+}
+
+dopoo_vec3D
+dopoo_vec3D_add(dopoo_vec3D v0, dopoo_vec3D v1)
+{
+    return (dopoo_vec3D){v0.x + v1.x,
+                         v0.y + v1.y,
+                         v0.z + v1.z};
+}
+
