@@ -2,10 +2,10 @@
 #define __DOPOOQUATERNION__
 
 typedef struct{
-    float x;
-    float y;
-    float z;
-    float w;
+    double x;
+    double y;
+    double z;
+    double w;
 }dopoo_quaternionF;
 
 #endif

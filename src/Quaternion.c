@@ -1,8 +1,9 @@
+#include "math.h"
 #include "../inc/Quaternion.h"
 #include "../inc/Math.h"
-#include "math.h"
+#include "../inc/Common.h"
 
-float
+double
 dopoo_quaternionF_length(dopoo_quaternionF quat)
 {
     return sqrt(quat.x * quat.x + quat.y * quat.y +
@@ -13,7 +14,7 @@ dopoo_quaternionF
 dopoo_quaternionF_norm(dopoo_quaternionF quat)
 {
     dopoo_quaternionF nq;
-    float length = dopoo_quaternionF_length(quat);
+    double length = dopoo_quaternionF_length(quat);
     if(length < toleranceF)
     {
         dopoo_printf(true, "the length of quaternion is too small to normalize!\n");   

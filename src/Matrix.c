@@ -1,12 +1,15 @@
+#include "assert.h"
+#include "math.h"
+#include "string.h"
 #include "../inc/Matrix.h"
 
 void
-dopoo_matrix3F_createRotateMatrix(float mat[][3], dopoo_axis axis, float radians)
+dopoo_matrix3F_createRotateMatrix(double mat[][3], dopoo_axis axis, double radians)
 {
-    memset(mat, 0, sizeof(float) * 9);
+    memset(mat, 0, sizeof(double) * 9);
     mat[0][0] = mat[1][1] = mat[2][2] = 1;
-    float c = cos(radians);
-    float s = sin(radians); 
+    double c = cos(radians);
+    double s = sin(radians); 
     switch (axis) {
     case X_AXIS:
         {
@@ -42,9 +45,9 @@ dopoo_matrix3F_createRotateMatrix(float mat[][3], dopoo_axis axis, float radians
 
 /*this = this * other*/
 void
-dopoo_matrix3F_postMult(float this[][3], const float other[][3])
+dopoo_matrix3F_postMult(double this[][3], const double other[][3])
 {
-    float res[3][3];
+    double res[3][3];
     for (int32_t rowIdx = 0; rowIdx < 3; rowIdx++)
     {
         for (int32_t colIdx = 0; colIdx < 3; colIdx++)
@@ -66,10 +69,10 @@ dopoo_matrix3F_postMult(float this[][3], const float other[][3])
 
 /*https://www.wikihow.com/Find-the-Inverse-of-a-3x3-Matrix*/
 void
-dopoo_matrix3F_inverse(float invMat[][3], float mat[][3])
+dopoo_matrix3F_inverse(double invMat[][3], double mat[][3])
 {
-    float determinant = 0;
-    float transposeMat[3][3];
+    double determinant = 0;
+    double transposeMat[3][3];
 
     //transpose
     for(int32_t row = 0; row < 3; row++)
