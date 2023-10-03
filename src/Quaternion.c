@@ -18,7 +18,7 @@ dopoo_quatD_norm(dopoo_quatD q)
     double length = dopoo_quatD_length(q);
     if(length < toleranceF)
     {
-        dopoo_printf(true, "the length of quaternion is too small to normalize!\n");   
+        dopoo_print(true, "the length of quaternion is too small to normalize!\n");   
         nq = (dopoo_quatD){0, 0, 0, 1};
         return nq;
     }
@@ -44,6 +44,7 @@ dopoo_quatD_getVec(dopoo_quatD q)
 dopoo_vec3D
 dopoo_quatD_rotate(dopoo_quatD q, dopoo_vec3D v)
 {
+    q = dopoo_quatD_norm(q);
     dopoo_vec3D qv = dopoo_quatD_getVec(q);
     double x = q.w * q.w - dopoo_vec3D_lengthSqr(qv);
     double y = dopoo_vec3D_dot(qv, v);
@@ -90,6 +91,13 @@ dopoo_quatD_m2q(double m[][3])
         double k = 0.5f / sqrt(1.0f + m[2][2] - m[0][0] - m[1][1]);
         return (dopoo_quatD){  k * (m[2][0] + m[0][2]), k * (m[2][1] + m[1][2]), 0.25f / k, k * (m[0][1] - m[1][0]) };
     }
+}
+
+void
+dopoo_quatD_print(dopoo_quatD q, const char* label)
+{
+    q = dopoo_quatD_norm(q);
+    dopoo_print(true, "%s: %f %f %f %f\n", label, q.x, q.y, q.z, q.w);
 }
 
 

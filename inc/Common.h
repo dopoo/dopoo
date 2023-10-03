@@ -10,7 +10,7 @@
 extern bool print;
 
 static inline void 
-dopoo_printf(bool isPrint, char *fmt, ...) 
+dopoo_print(bool isPrint, char *fmt, ...) 
 {
 	#ifdef __DEBUG__
     va_list va;

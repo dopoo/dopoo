@@ -15,6 +15,7 @@ LIBTARGET		= libdopoo.a
 TARGET		    = dopoo
 SRCDIR		    = src
 INCDIR		    = inc
+TESTDIR         = test
 OBJDIR		    = build/obj/dopoo
 BINDIR		    = build/bin
 LIBDIR          = build/lib
@@ -29,6 +30,7 @@ ALL_ARFLAGS     := rcs
 
 SRC			:= $(shell find $(SRCDIR) -type f -name '*.c')
 OBJ			:= $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SRC:.c=.o))
+TESTHEADER  := $(shell find $(TESTDIR) -type f -name '*.h')
 DEP			:= $(OBJ:.o=.d) 
 DEP         += $(FLUIDOBJ:.o=.d)
 
@@ -41,7 +43,7 @@ LIB			:= $(LIBDIR)/$(LIBTARGET)
 
 all: $(BIN)
 
-$(BIN):$(LIB) $(TESTFILE)
+$(BIN):$(LIB) $(TESTFILE)  $(TESTHEADER)
 	$(CC)  $(ALL_CFLAGS) $(TESTFILE) -L build/lib   -o  $@ -ldopoo
 
 

@@ -1,5 +1,6 @@
 #include <math.h>
 #include "../inc/Vec.h"
+#include "../inc/Common.h"
 
 
 double 
@@ -16,7 +17,7 @@ dopoo_vec3D_cross(dopoo_vec3D v0, dopoo_vec3D v1)
     dopoo_vec3D dst;
     dst.x = v0.y * v1.z - v0.z * v1.y;
     dst.y = v0.z * v1.x - v0.x * v1.z;
-    dst.z = v0.x * v1.y - v0.y * v1.z;
+    dst.z = v0.x * v1.y - v0.y * v1.x;
     return dst;
 }
 
@@ -51,5 +52,11 @@ dopoo_vec3D_add(dopoo_vec3D v0, dopoo_vec3D v1)
     return (dopoo_vec3D){v0.x + v1.x,
                          v0.y + v1.y,
                          v0.z + v1.z};
+}
+
+void
+dopoo_vec3D_print(dopoo_vec3D v, const char* label)
+{
+    dopoo_print(true, "%s: %f %f %f\n", label, v.x, v.y, v.z);
 }
 

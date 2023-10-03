@@ -1,6 +1,9 @@
-#include "stdio.h"
+#include <stdio.h>
+#include "testQuaternion.h"
 
-int main()
+int 
+main()
 {
-    printf("test...\n");
+    //dopoo_testQuat();
+    dopoo_testQuatAndMat();
 }
