@@ -15,8 +15,4 @@ Thumbs.db
 *.mov
 *.wmv
 
-# Bulid
-build/bin
-build/lib
-build/obj
 
