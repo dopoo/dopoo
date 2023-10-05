@@ -4,7 +4,7 @@
 #include "../inc/Matrix.h"
 
 void
-dopoo_matrix3D_createRotateMatrix(double mat[][3], dopoo_axis axis, double radians)
+dopoo_mat3D_createRotateMatrix(double mat[][3], dopoo_axis axis, double radians)
 {
     memset(mat, 0, sizeof(double) * 9);
     mat[0][0] = mat[1][1] = mat[2][2] = 1;
@@ -45,7 +45,7 @@ dopoo_matrix3D_createRotateMatrix(double mat[][3], dopoo_axis axis, double radia
 
 /*this = this * other*/
 void
-dopoo_matrix3D_postMult(double this[][3], const double other[][3])
+dopoo_mat3D_postMult(double this[][3], const double other[][3])
 {
     double res[3][3];
     for (int32_t rowIdx = 0; rowIdx < 3; rowIdx++)
@@ -69,7 +69,7 @@ dopoo_matrix3D_postMult(double this[][3], const double other[][3])
 
 /*https://www.wikihow.com/Find-the-Inverse-of-a-3x3-Matrix*/
 void
-dopoo_matrix3D_inverse(double invMat[][3], double mat[][3])
+dopoo_mat3D_inverse(double invMat[][3], double mat[][3])
 {
     double determinant = 0;
     double transposeMat[3][3];
@@ -92,7 +92,7 @@ dopoo_matrix3D_inverse(double invMat[][3], double mat[][3])
 }
 
 dopoo_vec3D
-dopoo_matrix3D_rotate(double m[][3], dopoo_vec3D v)
+dopoo_mat3D_postRotate(double m[][3], dopoo_vec3D v)
 {
     dopoo_vec3D dst;
 

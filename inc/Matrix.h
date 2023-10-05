@@ -9,15 +9,15 @@ typedef enum{
 }dopoo_axis;
 
 void
-dopoo_matrix3D_createRotateMatrix(double mat[][3], dopoo_axis axis, double radians);
+dopoo_mat3D_createRotateMatrix(double mat[][3], dopoo_axis axis, double radians);
 
 void
-dopoo_matrix3D_postMult(double this[][3], const double other[][3]);
+dopoo_mat3D_postMult(double this[][3], const double other[][3]);
 
 void
-dopoo_matrix3D_inverse(double invMat[][3], double mat[][3]);
+dopoo_mat3D_inverse(double invMat[][3], double mat[][3]);
 
 dopoo_vec3D
-dopoo_matrix3D_rotate(double m[][3], dopoo_vec3D v);
+dopoo_mat3D_postRotate(double m[][3], dopoo_vec3D v);
 
 #endif

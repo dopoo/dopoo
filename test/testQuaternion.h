@@ -30,7 +30,7 @@ dopoo_testQuatAndMat()
 
     double m[3][3];
     dopoo_quatD_q2m(m, q);
-    nv = dopoo_matrix3D_rotate(m, v);
+    nv = dopoo_mat3D_postRotate(m, v);
     dopoo_vec3D_print(nv, "matrix rotate nv");
 
     dopoo_quatD nq = dopoo_quatD_m2q(m);
