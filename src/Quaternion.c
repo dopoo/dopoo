@@ -93,6 +93,13 @@ dopoo_quatD_m2q(double m[][3])
     }
 }
 
+double 
+dopoo_quatD_rad(dopoo_quatD q)
+{
+    q = dopoo_quatD_norm(q);
+    return 2*acos(q.w);
+}
+
 void
 dopoo_quatD_print(dopoo_quatD q, const char* label)
 {

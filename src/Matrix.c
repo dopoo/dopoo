@@ -2,6 +2,7 @@
 #include "math.h"
 #include "string.h"
 #include "../inc/Matrix.h"
+#include "../inc/Common.h"
 
 void
 dopoo_mat3D_createRotateMatrix(double mat[][3], dopoo_axis axis, double radians)
@@ -91,6 +92,14 @@ dopoo_mat3D_inverse(double invMat[][3], double mat[][3])
     
 }
 
+void
+dopoo_mat3D_transpose(double mt[][3], double m[][3])
+{
+    for(int32_t i = 0; i < 3; i++)
+        for(int32_t j = 0; j < 3; j++)
+            mt[i][j] = m[j][i]; 
+}
+
 dopoo_vec3D
 dopoo_mat3D_postRotate(double m[][3], dopoo_vec3D v)
 {
@@ -101,4 +110,13 @@ dopoo_mat3D_postRotate(double m[][3], dopoo_vec3D v)
     dst.z = v.x * m[0][2] + v.y * m[1][2] + v.z * m[2][2];
 
     return dst;
+}
+
+void
+dopoo_mat3D_print(double m[][3], const char* label)
+{
+    dopoo_print(true, "%s:\n", label);
+    dopoo_print(true, "m00 m01 m02: %f %f %f\n", m[0][0], m[0][1], m[0][2]);
+    dopoo_print(true, "m10 m11 m12: %f %f %f\n", m[1][0], m[1][1], m[1][2]);
+    dopoo_print(true, "m20 m21 m22: %f %f %f\n", m[2][0], m[2][1], m[2][2]);
 }
