@@ -1,14 +1,28 @@
 #include "math.h"
+#include "assert.h"
 #include "../inc/Quaternion.h"
 #include "../inc/Math.h"
 #include "../inc/Common.h"
 #include "../inc/Vec.h"
+
+dopoo_quatD
+dopoo_quatD_create(double x, double y, double z, double w)
+{
+    return dopoo_quatD_norm((dopoo_quatD){x, y, z, w});
+}
 
 double
 dopoo_quatD_length(dopoo_quatD q)
 {
     return sqrt(q.x * q.x + q.y * q.y +
                 q.z * q.z + q.w * q.w);
+}
+
+double
+dopoo_quatD_lengthSqr(dopoo_quatD q)
+{
+    return  q.x * q.x + q.y * q.y +
+            q.z * q.z + q.w * q.w;
 }
 
 dopoo_quatD
@@ -30,7 +44,7 @@ dopoo_quatD_norm(dopoo_quatD q)
 }
 
 dopoo_quatD
-dopoo_quatD_negative(dopoo_quatD q)
+dopoo_quatD_inverse(dopoo_quatD q)
 {
     return (dopoo_quatD){-q.x, -q.y, -q.z, q.w};
 }
@@ -41,22 +55,36 @@ dopoo_quatD_getVec(dopoo_quatD q)
     return (dopoo_vec3D){q.x, q.y, q.z};
 }
 
+//(w^2 -||vq||^2)v+2(vq dot v)vq+2w(vq cross v)
 dopoo_vec3D
 dopoo_quatD_rotate(dopoo_quatD q, dopoo_vec3D v)
 {
-    q = dopoo_quatD_norm(q);
-    dopoo_vec3D qv = dopoo_quatD_getVec(q);
-    double x = q.w * q.w - dopoo_vec3D_lengthSqr(qv);
-    double y = dopoo_vec3D_dot(qv, v);
-    dopoo_vec3D cqvv = dopoo_vec3D_cross(qv, v);
+    assert(fabs(dopoo_quatD_lengthSqr(q) - 1) < deltaD);
+    dopoo_vec3D vq = dopoo_quatD_getVec(q);
+    double x = q.w * q.w - dopoo_vec3D_lengthSqr(vq);
+    double y = dopoo_vec3D_dot(vq, v);
+    dopoo_vec3D cvqv = dopoo_vec3D_cross(vq, v);
     return dopoo_vec3D_add(dopoo_vec3D_scale(v, x), 
-                           dopoo_vec3D_add(dopoo_vec3D_scale(qv, 2*y), dopoo_vec3D_scale(cqvv, 2 * q.w)));
+                           dopoo_vec3D_add(dopoo_vec3D_scale(vq, 2*y), dopoo_vec3D_scale(cvqv, 2 * q.w)));
+}
+
+// q0q1 = w0w1 - vq0 dot vq1 + w0vq1 + w1vq0 + vq0 cross vq1.
+dopoo_quatD
+dopoo_quatD_mult(dopoo_quatD q0, dopoo_quatD q1)
+{
+    dopoo_vec3D vq0 = dopoo_quatD_getVec(q0);
+    dopoo_vec3D vq1 = dopoo_quatD_getVec(q1);
+    double w = q0.w * q1.w - dopoo_vec3D_dot(vq0, vq1);
+    dopoo_vec3D v = dopoo_vec3D_add(
+                    dopoo_vec3D_cross(vq0, vq1), dopoo_vec3D_add(
+                    dopoo_vec3D_scale(vq1, q0.w), dopoo_vec3D_scale(vq0, q1.w)));
+    return (dopoo_quatD){v.x, v.y, v.z, w};
 }
 
 void
 dopoo_quatD_q2m(double m[][3], dopoo_quatD q)
 {
-    q = dopoo_quatD_norm(q);
+    assert(fabs(dopoo_quatD_lengthSqr(q) - 1) < deltaD);
     m[0][0] = 1 - 2 * q.y * q.y - 2 * q.z * q.z;
     m[1][1] = 1 - 2 * q.x * q.x - 2 * q.z * q.z;
     m[2][2] = 1 - 2 * q.x * q.x - 2 * q.y * q.y;
@@ -96,14 +124,13 @@ dopoo_quatD_m2q(double m[][3])
 double 
 dopoo_quatD_rad(dopoo_quatD q)
 {
-    q = dopoo_quatD_norm(q);
+    assert(fabs(dopoo_quatD_lengthSqr(q) - 1) < deltaD);
     return 2*acos(q.w);
 }
 
 void
 dopoo_quatD_print(dopoo_quatD q, const char* label)
 {
-    q = dopoo_quatD_norm(q);
     dopoo_print(true, "%s: %f %f %f %f\n", label, q.x, q.y, q.z, q.w);
 }
 

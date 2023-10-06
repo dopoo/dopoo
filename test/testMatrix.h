@@ -9,7 +9,7 @@
 static inline void 
 dopoo_testMat()
 {
-    dopoo_quatD q = {0.3, -1.2, 1.5, -1};
+    dopoo_quatD q = dopoo_quatD_create(0.3, -1.2, 1.5, -1);
     double m[3][3];
     dopoo_quatD_q2m(m, q);
     

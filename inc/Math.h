@@ -5,10 +5,10 @@ static const double DoubleOneMinusEpsilon = 0x1.fffffffffffffp-1;
 static const float FloatOneMinusEpsilon = 0x1.fffffep-1;
 
 static const float toleranceF = 1e-5f;
-static const double toleranceR = 1e-15;
+static const double toleranceD = 1e-15;
 
 static const float deltaF = 1e-5f;
-static const double deltaR = 1e-9;
+static const double deltaD = 1e-9;
 
 static const double invPi = 0.31830988618379067154;
 static const double inv2Pi = 0.15915494309189533577;

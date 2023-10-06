@@ -22,6 +22,9 @@ dopoo_vec3D_scale(dopoo_vec3D v, double scale);
 dopoo_vec3D
 dopoo_vec3D_add(dopoo_vec3D v0, dopoo_vec3D v1);
 
+dopoo_vec3D
+dopoo_vec3D_minus(dopoo_vec3D v0, dopoo_vec3D v1);
+
 void
 dopoo_vec3D_print(dopoo_vec3D v, const char* label);
 
