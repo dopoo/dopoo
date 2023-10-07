@@ -23,6 +23,9 @@ dopoo_mat3D_transpose(double mt[][3], double m[][3]);
 dopoo_vec3D
 dopoo_mat3D_postRotate(double m[][3], dopoo_vec3D v);
 
+dopoo_vec3D
+dopoo_mat3D_preRotate(double m[][3], dopoo_vec3D v);
+
 void
 dopoo_mat3D_print(double m[][3], const char* label);
 

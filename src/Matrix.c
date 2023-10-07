@@ -112,6 +112,18 @@ dopoo_mat3D_postRotate(double m[][3], dopoo_vec3D v)
     return dst;
 }
 
+dopoo_vec3D
+dopoo_mat3D_preRotate(double m[][3], dopoo_vec3D v)
+{
+    dopoo_vec3D dst;
+
+    dst.x = v.x * m[0][0] + v.y * m[0][1] + v.z * m[0][2];
+    dst.y = v.x * m[1][0] + v.y * m[1][1] + v.z * m[1][2];
+    dst.z = v.x * m[2][0] + v.y * m[2][1] + v.z * m[2][2];
+
+    return dst;
+}
+
 void
 dopoo_mat3D_print(double m[][3], const char* label)
 {

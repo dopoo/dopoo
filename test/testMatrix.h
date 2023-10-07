@@ -19,9 +19,16 @@ dopoo_testMat()
     double mt[3][3];
     dopoo_mat3D_transpose(mt, m);
 
+    // M^T = M^{-1}
     dopoo_mat3D_print(m, "M");
     dopoo_mat3D_print(im, "IM");
     dopoo_mat3D_print(mt, "MT");
+
+    //MVM = V
+    dopoo_vec3D v = {0.5, -0.7, 1.2};
+    dopoo_vec3D nv = dopoo_mat3D_preRotate(m, dopoo_mat3D_postRotate(m, v));
+    dopoo_vec3D_print(v, "v");
+    dopoo_vec3D_print(nv, "mvm");
 }
 
 

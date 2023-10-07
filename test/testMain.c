@@ -5,7 +5,7 @@
 int 
 main()
 {
-    dopoo_testQuat();
-    dopoo_testQuatAndMat();
-    //dopoo_testMat();
+    //dopoo_testQuat();
+    //dopoo_testQuatAndMat();
+    dopoo_testMat();
 }
