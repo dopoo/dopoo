@@ -65,6 +65,6 @@ dopoo_vec3D_minus(dopoo_vec3D v0, dopoo_vec3D v1)
 void
 dopoo_vec3D_print(dopoo_vec3D v, const char* label)
 {
-    dopoo_print(true, "%s: %f %f %f\n", label, v.x, v.y, v.z);
+    dopoo_print(true, "%s:\t %f %f %f\n", label, v.x, v.y, v.z);
 }
 
