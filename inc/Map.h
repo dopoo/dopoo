@@ -33,5 +33,8 @@ dopoo_mapD_addTransit(dopoo_mapD* map, dopoo_vec3D v);
 void
 dopoo_mapD_addRotate(dopoo_mapD* map, dopoo_quatD q);
 
+void
+dopoo_mapD_init(dopoo_mapD* map);
+
 
 #endif

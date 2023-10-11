@@ -62,6 +62,22 @@ dopoo_vec3D_minus(dopoo_vec3D v0, dopoo_vec3D v1)
                          v0.z - v1.z};
 }
 
+dopoo_vec3D 
+dopoo_vec3D_inv(dopoo_vec3D v)
+{
+	v.x = 1. / v.x;
+	v.y = 1. / v.y;
+	v.z = 1. / v.z;
+    return v;
+}
+
+dopoo_vec3D
+dopoo_vec3D_norm(dopoo_vec3D v)
+{
+    double l = dopoo_vec3D_length(v);
+    return dopoo_vec3D_scale(v, 1./ l);
+}
+
 void
 dopoo_vec3D_print(dopoo_vec3D v, const char* label)
 {

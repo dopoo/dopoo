@@ -53,3 +53,11 @@ dopoo_mapD_addRotate(dopoo_mapD* map, dopoo_quatD q)
 {
     map->r = dopoo_quatD_mult(q, map->r);
 }
+
+void
+dopoo_mapD_init(dopoo_mapD* map)
+{
+    map->r = dopoo_quatD_create(0, 0, 0, 1);
+    map->t = (dopoo_vec3D){0, 0, 0};
+    map->s = 1;
+}
