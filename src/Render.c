@@ -2,13 +2,13 @@
 
 
 void
-dopoo_render_sphere(const dopoo_camera* camera, dopoo_vec3D c, double r)
+dopoo_render_sphere(const dopoo_camera* camera, dopoo_vec3D c, double r, dopoo_vec3D rgb)
 {
     dopoo_rayD ray;
 
     int32_t width = camera->film.width;
     int32_t height = camera->film.height;
-    dopoo_rgbD rgb;
+    dopoo_vec3D prgb;
     double t0, t1;
 
     for (int32_t j=0; j < height; ++j) {
@@ -21,14 +21,14 @@ dopoo_render_sphere(const dopoo_camera* camera, dopoo_vec3D c, double r)
                 dopoo_vec3D p0 = dopoo_rayD_computeP(&ray, t0);
                 dopoo_vec3D n = dopoo_vec3D_norm(dopoo_vec3D_minus(p0, c));
                 double z = dopoo_vec3D_getz(n);
-                rgb = (dopoo_rgbD){z, z, z};
+                prgb = dopoo_vec3D_scale(rgb, z);
             }
             else
             {
-                rgb = (dopoo_rgbD){0, 0, 0};
+                prgb = (dopoo_vec3D){0, 0, 0};
             }
             
-            (*(camera->film.pixel + j * width + i)) = dopoo_rgb_DtoI(rgb);
+            (*(camera->film.pixel + j * width + i)) = dopoo_rgbI_fromVec(prgb);
         }//loop over image height
     }//loop over image width
 }

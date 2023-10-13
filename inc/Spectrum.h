@@ -2,6 +2,7 @@
 #define __DOPOOSPECTRUM__
 
 #include <stdint.h>
+#include "Vec.h"
 
 #ifdef XCODE_PROGRAM
 
@@ -31,14 +32,8 @@ typedef union{
 
 #endif
 
-typedef struct{
-    double r;
-    double g;
-    double b;
-} dopoo_rgbD;
-
 dopoo_rgbI
-dopoo_rgb_DtoI(dopoo_rgbD d);
+dopoo_rgbI_fromVec(dopoo_vec3D v);
 
 
 #endif

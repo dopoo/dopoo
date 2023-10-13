@@ -1,6 +1,7 @@
 #include <math.h>
 #include "../inc/Vec.h"
 #include "../inc/Common.h"
+#include "../inc/Math.h"
 
 
 double 
@@ -82,6 +83,15 @@ double
 dopoo_vec3D_getz(dopoo_vec3D v)
 {
     return v.z;
+}
+
+dopoo_vec3D
+dopoo_vec3D_clamp(dopoo_vec3D v)
+{
+	v.x = dopoo_double_clamp(v.x, 0, 1.0);
+	v.y = dopoo_double_clamp(v.y, 0, 1.0);
+	v.z = dopoo_double_clamp(v.z, 0, 1.0);
+	return v;
 }
 
 void

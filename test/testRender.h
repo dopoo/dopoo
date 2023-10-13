@@ -20,9 +20,10 @@ dopoo_testRenderSphere()
     // create sphere
     dopoo_vec3D c = {0, 0, 0};
     double r = 0.5;
+    dopoo_vec3D rgb = {1, 1, 1};
 
     //render
-    dopoo_render_sphere(camera, c, r);
+    dopoo_render_sphere(camera, c, r, rgb);
 
     //save render result to image
     dopoo_rgbI* pixel = dopoo_camera_getPixel(camera);

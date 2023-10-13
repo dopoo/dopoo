@@ -45,4 +45,7 @@ dopoo_vec3D_norm(dopoo_vec3D v);
 double
 dopoo_vec3D_getz(dopoo_vec3D v);
 
+dopoo_vec3D
+dopoo_vec3D_clamp(dopoo_vec3D v);
+
 #endif
