@@ -21,4 +21,10 @@ dopoo_rayD_setT0(dopoo_rayD* ray, double t0);
 void 
 dopoo_rayD_setT1(dopoo_rayD* ray, double t1);
 
+dopoo_vec3D 
+dopoo_rayD_computeP(const dopoo_rayD* ray, double t);
+
+bool 
+dopoo_rayD_intersectSphere(const dopoo_rayD* ray, dopoo_vec3D c, double r, double* t0, double* t1);
+
 #endif

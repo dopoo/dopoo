@@ -20,4 +20,7 @@ static const double sqrt2 = 1.41421356237309504880;
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 
+double 
+dopoo_double_clamp(double val, double low, double high) ;
+
 #endif

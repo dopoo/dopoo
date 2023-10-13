@@ -15,4 +15,5 @@ Thumbs.db
 *.mov
 *.wmv
 
-
+# data
+data

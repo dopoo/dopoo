@@ -8,12 +8,12 @@ dopoo_film_init(dopoo_film* film, int32_t width, int32_t height)
 {
     film->width = width;
     film->height = height;
-    film->pixels = (dopoo_color*)malloc(sizeof(dopoo_color) * width * height);
-    memset(film->pixels, 0, sizeof(dopoo_color) * width * height);
+    film->pixel = (dopoo_rgbI*)malloc(sizeof(dopoo_rgbI) * width * height);
+    memset(film->pixel, 0, sizeof(dopoo_rgbI) * width * height);
     for(int32_t i = 0; i < width; i++)
         for(int32_t j = 0; j < height; j++)
         {
-            dopoo_color* c = film->pixels+ j * width + i;
+            dopoo_rgbI* c = film->pixel+ j * width + i;
             c->sColor.a = 0xff;
         }
 }
@@ -21,7 +21,7 @@ dopoo_film_init(dopoo_film* film, int32_t width, int32_t height)
 void 
 dopoo_film_clear(dopoo_film film)
 {
-	free(film.pixels);
+	free(film.pixel);
 }
 
 void 
@@ -70,5 +70,44 @@ dopoo_camera_clear(dopoo_camera* camera)
     if(!camera) return;
     dopoo_film_clear(camera->film);
     free(camera);
+}
+
+dopoo_vec3D
+dopoo_camera_rasterToScreen(const dopoo_camera* camera, double i, double j, double z)
+{
+    return (dopoo_vec3D) {(2 * i / (double)(camera->film.width) - 1) * camera->screenWidth,
+                          (1 - 2 * j / (double)(camera->film.height)) * camera->screenHeight,
+                           z};
+}
+
+void
+dopoo_orthographicCamera_getRay(const dopoo_camera* camera, dopoo_rayD* ray, int32_t i, int32_t j, double iOffset, double jOffset) 
+{
+	*ray = camera->ray;
+    ray->p = dopoo_camera_rasterToScreen(camera, (double)(i) + iOffset, (double)(j) + jOffset, 0.0);
+}
+
+void
+dopoo_camera_getRay(const dopoo_camera* camera, dopoo_rayD* ray, int32_t i, int32_t j, double iOffset, double jOffset)
+{
+    return dopoo_orthographicCamera_getRay(camera, ray, i, j, iOffset, jOffset);
+}
+
+int32_t
+dopoo_camera_getWidth(const dopoo_camera* camera)
+{
+    return camera->film.width;
+}
+
+int32_t
+dopoo_camera_getHeight(const dopoo_camera* camera)
+{
+    return camera->film.height;
+}
+
+dopoo_rgbI*
+dopoo_camera_getPixel(const dopoo_camera* camera)
+{
+    return camera->film.pixel;
 }
 

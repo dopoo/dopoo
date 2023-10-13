@@ -78,6 +78,12 @@ dopoo_vec3D_norm(dopoo_vec3D v)
     return dopoo_vec3D_scale(v, 1./ l);
 }
 
+double
+dopoo_vec3D_getz(dopoo_vec3D v)
+{
+    return v.z;
+}
+
 void
 dopoo_vec3D_print(dopoo_vec3D v, const char* label)
 {

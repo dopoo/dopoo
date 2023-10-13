@@ -14,7 +14,7 @@ typedef union{
     } sColor;
 
     int32_t iColor;
-} dopoo_color;
+} dopoo_rgbI;
 
 #else
 
@@ -27,8 +27,18 @@ typedef union{
     } sColor;
 
     int32_t iColor;
-} dopoo_color;
+} dopoo_rgbI;
 
 #endif
+
+typedef struct{
+    double r;
+    double g;
+    double b;
+} dopoo_rgbD;
+
+dopoo_rgbI
+dopoo_rgb_DtoI(dopoo_rgbD d);
+
 
 #endif
