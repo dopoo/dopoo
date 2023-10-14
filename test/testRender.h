@@ -30,7 +30,7 @@ dopoo_testRenderSphere()
     int32_t width = dopoo_camera_getWidth(camera);
     int32_t height = dopoo_camera_getHeight(camera);
     const char* path = "data/renderResult/sphere.jpg";
-    stbi_write_bmp(path, width, height, 4, pixel);
+    stbi_write_jpg(path, width, height, 4, pixel, 90);
 }
 
 #endif
