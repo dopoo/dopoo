@@ -23,4 +23,7 @@ static const double sqrt2 = 1.41421356237309504880;
 double 
 dopoo_double_clamp(double val, double low, double high) ;
 
+void 
+dopoo_double_swap(double* a, double* b);
+
 #endif

@@ -10,3 +10,11 @@ dopoo_double_clamp(double val, double low, double high)
     else
         return val;
 }
+
+void 
+dopoo_double_swap(double* a, double* b)
+{
+    double tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
