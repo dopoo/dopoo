@@ -65,13 +65,15 @@ bool
 dopoo_rayD_intersectCylinder(const dopoo_rayD* ray, double h, double r, double* t0, double* t1)
 {
 	assert(fabs(dopoo_vec3D_lengthSqr(ray->d) - 1) < deltaD);
+	double px = dopoo_vec3D_getx(ray->p);
+	double py = dopoo_vec3D_gety(ray->p);
+	double pz = dopoo_vec3D_getz(ray->p);
 	double dx = dopoo_vec3D_getx(ray->d);
 	double dy = dopoo_vec3D_gety(ray->d);
 	double dz = dopoo_vec3D_getz(ray->d);
-	double py = dopoo_vec3D_gety(ray->p);
     if(fabs(fabs(dy) - 1) < deltaD)  //case 1 parellel
 	{
-        double dist = sqrt(dx * dx + dz * dz);
+        double dist = sqrt(px * px + pz * pz);
 		if(dist > r)
 		    return false;
 		*t0 = -py / dy;
