@@ -85,6 +85,18 @@ dopoo_vec3D_getz(dopoo_vec3D v)
     return v.z;
 }
 
+double
+dopoo_vec3D_gety(dopoo_vec3D v)
+{
+    return v.y;
+}
+
+double
+dopoo_vec3D_getx(dopoo_vec3D v)
+{
+    return v.x;
+}
+
 dopoo_vec3D
 dopoo_vec3D_clamp(dopoo_vec3D v)
 {

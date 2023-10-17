@@ -1,8 +1,9 @@
 #ifndef __DOPOOBBOX__
 #define __DOPOOBBOX__
 
+#include <stdbool.h>
 #include "Vec.h" 
-#include "stdbool.h"
+#include "Map.h"
 
 typedef struct {
 	dopoo_vec3D p, d, invD;
@@ -26,5 +27,11 @@ dopoo_rayD_computeP(const dopoo_rayD* ray, double t);
 
 bool 
 dopoo_rayD_intersectSphere(const dopoo_rayD* ray, dopoo_vec3D c, double r, double* t0, double* t1);
+
+bool
+dopoo_rayD_intersectCylinder(const dopoo_rayD* ray, double h, double r, double* t0, double* t1);
+
+void
+dopoo_rayD_applyInverse(dopoo_rayD* ray, dopoo_mapD* map);
 
 #endif
