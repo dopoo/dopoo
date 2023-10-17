@@ -10,22 +10,22 @@ typedef struct{
 }dopoo_mapD;
 
 dopoo_vec3D
-dopoo_mapD_applyR(dopoo_mapD* map, dopoo_vec3D v);
+dopoo_mapD_applyR(const dopoo_mapD* map, dopoo_vec3D v);
 
 dopoo_vec3D
-dopoo_mapD_applyRS(dopoo_mapD* map, dopoo_vec3D v);
+dopoo_mapD_applyRS(const dopoo_mapD* map, dopoo_vec3D v);
 
 dopoo_vec3D
-dopoo_mapD_applyRST(dopoo_mapD* map, dopoo_vec3D v);
+dopoo_mapD_applyRST(const dopoo_mapD* map, dopoo_vec3D v);
 
 dopoo_vec3D
-dopoo_mapD_applyInvR(dopoo_mapD* map, dopoo_vec3D v);
+dopoo_mapD_applyInvR(const dopoo_mapD* map, dopoo_vec3D v);
 
 dopoo_vec3D
-dopoo_mapD_applyInvRS(dopoo_mapD* map, dopoo_vec3D v);
+dopoo_mapD_applyInvRS(const dopoo_mapD* map, dopoo_vec3D v);
 
 dopoo_vec3D
-dopoo_mapD_applyInvRST(dopoo_mapD* map, dopoo_vec3D v);
+dopoo_mapD_applyInvRST(const dopoo_mapD* map, dopoo_vec3D v);
 
 void
 dopoo_mapD_addTransit(dopoo_mapD* map, dopoo_vec3D v);

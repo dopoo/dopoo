@@ -85,6 +85,7 @@ dopoo_orthographicCamera_getRay(const dopoo_camera* camera, dopoo_rayD* ray, int
 {
 	*ray = camera->ray;
     ray->p = dopoo_camera_rasterToScreen(camera, (double)(i) + iOffset, (double)(j) + jOffset, 0.0);
+    ray->p = dopoo_mapD_applyRST(&(camera->map), ray->p);
 }
 
 void
