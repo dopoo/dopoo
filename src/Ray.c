@@ -108,6 +108,8 @@ dopoo_rayD_intersectCylinder(const dopoo_rayD* ray, double h, double r, double* 
 		dopoo_vec3D n = dopoo_vec3D_norm(dopoo_vec3D_cross(p0p1, ray->d));
 		dopoo_vec3D p0p = ray->p;
 		double dist = dopoo_vec3D_dot(p0p, n);
+		if(fabs(dist) > r)
+		    return false;
 		dopoo_vec3D _p = dopoo_vec3D_minus(ray->p, dopoo_vec3D_scale(n, dist));
 		double pp2;
 		if(fabs(dx) > deltaD)
