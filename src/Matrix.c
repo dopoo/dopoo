@@ -53,8 +53,7 @@ dopoo_mat3D_postMult(double this[][3], const double other[][3])
     {
         for (int32_t colIdx = 0; colIdx < 3; colIdx++)
         {
-
-                    res[rowIdx][colIdx] = (this[rowIdx][0] * other[0][colIdx] + this[rowIdx][1] * other[1][colIdx]
+            res[rowIdx][colIdx] = (this[rowIdx][0] * other[0][colIdx] + this[rowIdx][1] * other[1][colIdx]
                                                 + this[rowIdx][2] * other[2][colIdx] );
         }
     }

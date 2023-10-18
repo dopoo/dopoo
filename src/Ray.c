@@ -5,20 +5,28 @@
 
 void 
 dopoo_rayD_setP(dopoo_rayD* ray, dopoo_vec3D p)
-{ ray->p = p; }
+{ 
+    ray->p = p; 
+}
 
 void 
 dopoo_rayD_setD(dopoo_rayD* ray, dopoo_vec3D d) 
 { 
-	ray->d = d;
-	ray->invD = dopoo_vec3D_inv(ray->d);
+    ray->d = d;
+    ray->invD = dopoo_vec3D_inv(ray->d);
 }
 
 void 
-dopoo_rayD_setT0(dopoo_rayD* ray, double t0) { ray->t0 = t0; }
+dopoo_rayD_setT0(dopoo_rayD* ray, double t0) 
+{ 
+    ray->t0 = t0; 
+}
 
 void 
-dopoo_rayD_setT1(dopoo_rayD* ray, double t1) { ray->t1 = t1; } 
+dopoo_rayD_setT1(dopoo_rayD* ray, double t1) 
+{ 
+    ray->t1 = t1; 
+} 
 
 bool
 dopoo_rayD_test(const dopoo_rayD* ray, double t) 
@@ -29,34 +37,34 @@ dopoo_rayD_test(const dopoo_rayD* ray, double t)
 dopoo_vec3D 
 dopoo_rayD_computeP(const dopoo_rayD* ray, double t)
 {
-	return dopoo_vec3D_add(ray->p, dopoo_vec3D_scale(ray->d, t));
+    return dopoo_vec3D_add(ray->p, dopoo_vec3D_scale(ray->d, t));
 }
 
 void
 dopoo_rayD_applyInverse(dopoo_rayD* ray, dopoo_mapD* map)
 {
-	ray->p = dopoo_mapD_applyInvRST(map, ray->p);
-	ray->d = dopoo_mapD_applyInvR(map, ray->d);
-	ray->invD = dopoo_vec3D_inv(ray->d);
+    ray->p = dopoo_mapD_applyInvRST(map, ray->p);
+    ray->d = dopoo_mapD_applyInvR(map, ray->d);
+    ray->invD = dopoo_vec3D_inv(ray->d);
 }
 
 bool 
 dopoo_rayD_intersectSphere(const dopoo_rayD* ray, dopoo_vec3D c, double r, double* t0, double* t1)
 {
-	assert(fabs(dopoo_vec3D_lengthSqr(ray->d) - 1) < deltaD);
+    assert(fabs(dopoo_vec3D_lengthSqr(ray->d) - 1) < deltaD);
     dopoo_vec3D cp = dopoo_vec3D_minus(ray->p, c);
-	double distSqr = dopoo_vec3D_lengthSqr(dopoo_vec3D_cross(cp, ray->d));
+    double distSqr = dopoo_vec3D_lengthSqr(dopoo_vec3D_cross(cp, ray->d));
     double rSqr = r * r;
-	if(distSqr > rSqr)
-	    return false;
-	double pp3 = sqrt(dopoo_vec3D_lengthSqr(cp) - distSqr);
-	double p1p3 = sqrt(rSqr - distSqr);
-	double p2p3 = p1p3;
-	double pp1 = pp3 - p1p3;
-	double pp2 = pp3 + p2p3;
-	*t0 = pp1;
-	*t1 = pp2;
-	if (*t0 > *t1) return false;
+    if(distSqr > rSqr)
+        return false;
+    double pp3 = sqrt(dopoo_vec3D_lengthSqr(cp) - distSqr);
+    double p1p3 = sqrt(rSqr - distSqr);
+    double p2p3 = p1p3;
+    double pp1 = pp3 - p1p3;
+    double pp2 = pp3 + p2p3;
+    *t0 = pp1;
+    *t1 = pp2;
+    if (*t0 > *t1) return false;
 
     return true;
 }
@@ -64,74 +72,74 @@ dopoo_rayD_intersectSphere(const dopoo_rayD* ray, dopoo_vec3D c, double r, doubl
 bool
 dopoo_rayD_intersectCylinder(const dopoo_rayD* ray, double h, double r, double* t0, double* t1)
 {
-	assert(fabs(dopoo_vec3D_lengthSqr(ray->d) - 1) < deltaD);
-	double px = dopoo_vec3D_getx(ray->p);
-	double py = dopoo_vec3D_gety(ray->p);
-	double pz = dopoo_vec3D_getz(ray->p);
-	double dx = dopoo_vec3D_getx(ray->d);
-	double dy = dopoo_vec3D_gety(ray->d);
-	double dz = dopoo_vec3D_getz(ray->d);
+    assert(fabs(dopoo_vec3D_lengthSqr(ray->d) - 1) < deltaD);
+    double px = dopoo_vec3D_getx(ray->p);
+    double py = dopoo_vec3D_gety(ray->p);
+    double pz = dopoo_vec3D_getz(ray->p);
+    double dx = dopoo_vec3D_getx(ray->d);
+    double dy = dopoo_vec3D_gety(ray->d);
+    double dz = dopoo_vec3D_getz(ray->d);
     if(fabs(fabs(dy) - 1) < deltaD)  //case 1 parellel
-	{
+    {
         double dist = sqrt(px * px + pz * pz);
-		if(dist > r)
-		    return false;
-		*t0 = (-h/2 - py) / dy;
-		*t1 = (h/2 - py) / dy;
-		if (*t0 > *t1) 
-		    dopoo_double_swap(t0, t1); 
-	}
-	else if (fabs(dy) < deltaD)      //case2 perpendicular
-	{
-		if(py > h/2 || py < -h/2)
-		    return false;
-		dopoo_vec3D c = {0, py, 0};
-		dopoo_vec3D cp = dopoo_vec3D_minus(ray->p, c);
-		double distSqr = dopoo_vec3D_lengthSqr(dopoo_vec3D_cross(cp, ray->d));
-		double rSqr = r * r;
-		if(distSqr > rSqr)
-		    return false;
-		double pp2 = sqrt(dopoo_vec3D_lengthSqr(cp) - distSqr);
-	    double p3p2 = sqrt(rSqr - distSqr);
-	    double p4p2 = p3p2;
-	    *t0 = pp2 - p3p2;
-	    *t1 = pp2 + p4p2;
-		if (*t0 > *t1) return false;
-	}
-	else                            // case3 other
-	{
-       	double t00 = (-h/2 - py) / dy;
-		double t10 = (h/2 - py) / dy;
-		if(t00 > t10)
-		    dopoo_double_swap(&t00, &t10); 
-		dopoo_vec3D p0p1 = {0, h, 0};
-		dopoo_vec3D n = dopoo_vec3D_norm(dopoo_vec3D_cross(p0p1, ray->d));
-		dopoo_vec3D p0p = ray->p;
-		double dist = dopoo_vec3D_dot(p0p, n);
-		if(fabs(dist) > r)
-		    return false;
-		dopoo_vec3D _p = dopoo_vec3D_minus(ray->p, dopoo_vec3D_scale(n, dist));
-		double pp2;
-		if(fabs(dx) > deltaD)
-		{
-			double _px = dopoo_vec3D_getx(_p);
+        if(dist > r)
+            return false;
+        *t0 = (-h/2 - py) / dy;
+        *t1 = (h/2 - py) / dy;
+        if (*t0 > *t1) 
+            dopoo_double_swap(t0, t1); 
+    }
+    else if (fabs(dy) < deltaD)      //case2 perpendicular
+    {
+        if(py > h/2 || py < -h/2)
+            return false;
+        dopoo_vec3D c = {0, py, 0};
+        dopoo_vec3D cp = dopoo_vec3D_minus(ray->p, c);
+        double distSqr = dopoo_vec3D_lengthSqr(dopoo_vec3D_cross(cp, ray->d));
+        double rSqr = r * r;
+        if(distSqr > rSqr)
+            return false;
+        double pp2 = sqrt(dopoo_vec3D_lengthSqr(cp) - distSqr);
+        double p3p2 = sqrt(rSqr - distSqr);
+        double p4p2 = p3p2;
+        *t0 = pp2 - p3p2;
+        *t1 = pp2 + p4p2;
+        if (*t0 > *t1) return false;
+    }
+    else                            // case3 other
+    {
+        double t00 = (-h/2 - py) / dy;
+        double t10 = (h/2 - py) / dy;
+        if(t00 > t10)
+            dopoo_double_swap(&t00, &t10); 
+        dopoo_vec3D p0p1 = {0, h, 0};
+        dopoo_vec3D n = dopoo_vec3D_norm(dopoo_vec3D_cross(p0p1, ray->d));
+        dopoo_vec3D p0p = ray->p;
+        double dist = dopoo_vec3D_dot(p0p, n);
+        if(fabs(dist) > r)
+            return false;
+        dopoo_vec3D _p = dopoo_vec3D_minus(ray->p, dopoo_vec3D_scale(n, dist));
+        double pp2;
+        if(fabs(dx) > deltaD)
+        {
+            double _px = dopoo_vec3D_getx(_p);
             pp2 = -_px/dx; 
-		}
-		else
-		{
-			double _pz = dopoo_vec3D_getz(_p);
+        }
+        else
+        {
+            double _pz = dopoo_vec3D_getz(_p);
             pp2 = -_pz/dz; 
-		}
+        }
 		
-		double p3p2 = sqrt(r * r - dist * dist) / sqrt(dx * dx + dz * dz);
-		double p4p2 = p3p2;
-		double t01 = pp2 - p3p2;
-		double t11 = pp2 + p4p2;
+        double p3p2 = sqrt(r * r - dist * dist) / sqrt(dx * dx + dz * dz);
+        double p4p2 = p3p2;
+        double t01 = pp2 - p3p2;
+        double t11 = pp2 + p4p2;
 
-		*t0 = max(t00, t01);
-		*t1 = min(t10, t11);
-		if (*t0 > *t1) return false;
-	}
+        *t0 = max(t00, t01);
+        *t1 = min(t10, t11);
+        if (*t0 > *t1) return false;
+    }
 
-	return true;
+    return true;
 }

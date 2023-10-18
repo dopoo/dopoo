@@ -7,12 +7,12 @@
 #include "Map.h"
 
 typedef enum {
-	PERSPECTIVECAMERA = 0,
-	ORTHOGRAPHICCAMERA = 1
+    PERSPECTIVECAMERA = 0,
+    ORTHOGRAPHICCAMERA = 1
 } dopoo_cameraType;
 
 typedef struct{
-	int32_t width, height;
+    int32_t width, height;
     dopoo_rgbI* pixel;
 } dopoo_film;
 

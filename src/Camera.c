@@ -21,7 +21,7 @@ dopoo_film_init(dopoo_film* film, int32_t width, int32_t height)
 void 
 dopoo_film_clear(dopoo_film film)
 {
-	free(film.pixel);
+    free(film.pixel);
 }
 
 void 
@@ -83,7 +83,7 @@ dopoo_camera_rasterToScreen(const dopoo_camera* camera, double i, double j, doub
 void
 dopoo_orthographicCamera_getRay(const dopoo_camera* camera, dopoo_rayD* ray, int32_t i, int32_t j, double iOffset, double jOffset) 
 {
-	*ray = camera->ray;
+    *ray = camera->ray;
     ray->p = dopoo_camera_rasterToScreen(camera, (double)(i) + iOffset, (double)(j) + jOffset, 0.0);
     ray->p = dopoo_mapD_applyRST(&(camera->map), ray->p);
 }

@@ -6,7 +6,7 @@
 #include "Map.h"
 
 typedef struct {
-	dopoo_vec3D p, d, invD;
+    dopoo_vec3D p, d, invD;
     double t0, t1;
 } dopoo_rayD;
 

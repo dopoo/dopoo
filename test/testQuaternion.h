@@ -9,19 +9,19 @@
 static inline void 
 dopoo_testQuat()
 {
-  dopoo_vec3D v = {-1, 0, 0};
-  dopoo_quatD q = dopoo_quatD_create(0, 1, 0, 1);
-  dopoo_vec3D nv = dopoo_quatD_rotate(q, v);  
-  dopoo_vec3D_print(nv, "nv");
-
-  v = (dopoo_vec3D){-1, 1, 0};
-  q = dopoo_quatD_create(1, 1, 0, sqrt(2));
-  nv = dopoo_quatD_rotate(q, v);  
-  dopoo_vec3D_print(nv, "nv");
-
-  dopoo_quatD iq = dopoo_quatD_inverse(q);
-  dopoo_quatD q1 = dopoo_quatD_mult(q, iq);
-  dopoo_quatD_print(q1, "q*iq");
+    dopoo_vec3D v = {-1, 0, 0};
+    dopoo_quatD q = dopoo_quatD_create(0, 1, 0, 1);
+    dopoo_vec3D nv = dopoo_quatD_rotate(q, v);  
+    dopoo_vec3D_print(nv, "nv");
+  
+    v = (dopoo_vec3D){-1, 1, 0};
+    q = dopoo_quatD_create(1, 1, 0, sqrt(2));
+    nv = dopoo_quatD_rotate(q, v);  
+    dopoo_vec3D_print(nv, "nv");
+  
+    dopoo_quatD iq = dopoo_quatD_inverse(q);
+    dopoo_quatD q1 = dopoo_quatD_mult(q, iq);
+    dopoo_quatD_print(q1, "q*iq");
 }
 
 static inline void 

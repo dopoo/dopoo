@@ -12,7 +12,7 @@ extern bool print;
 static inline void 
 dopoo_print(bool isPrint, char *fmt, ...) 
 {
-	#ifdef __DEBUG__
+    #ifdef __DEBUG__
     va_list va;
     va_start (va, fmt);
     
