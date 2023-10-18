@@ -36,8 +36,27 @@ dopoo_render_sphere(const dopoo_camera* camera, dopoo_vec3D c, double r, dopoo_v
     }//loop over image width
 }
 
+dopoo_vec3D
+dopoo_cylinder_computeNorm(double h, double r, dopoo_vec3D p)
+{
+    double px = dopoo_vec3D_getx(p);
+    double py = dopoo_vec3D_gety(p);
+    double pz = dopoo_vec3D_getz(p);
+    dopoo_vec3D n;
+    
+    if(fabs(px * px + pz * pz - r * r) < deltaD)
+        n = (dopoo_vec3D){px, 0, pz};
+    else if(py > h / 2)
+        n = (dopoo_vec3D){0, 1, 0};
+    else
+        n = (dopoo_vec3D){0, -1, 0};
+    
+    //n = dopoo_vec3D_minus(p0, (dopoo_vec3D){0, h/2, 0});
+    return n;
+}
+
 void
-dopoo_render_cylinder(const dopoo_camera* camera, double h, double r, dopoo_mapD* map, dopoo_vec3D rgb)
+dopoo_render_cylinder(const dopoo_camera* camera, double h, double r, dopoo_mapD* map, dopoo_vec3D rgb, dopoo_vec3D lineRgb)
 {
     dopoo_rayD ray;
 
@@ -45,6 +64,7 @@ dopoo_render_cylinder(const dopoo_camera* camera, double h, double r, dopoo_mapD
     int32_t height = camera->film.height;
     dopoo_vec3D prgb;
     double t0, t1;
+    double lineWidth = 0.01;
 
     for (int32_t j=0; j < height; ++j) {
         for (int32_t i=0; i < width; ++i) {
@@ -55,23 +75,14 @@ dopoo_render_cylinder(const dopoo_camera* camera, double h, double r, dopoo_mapD
             if(dopoo_rayD_intersectCylinder(&ray, h, r, &t0, &t1))
             {
                 dopoo_vec3D p0 = dopoo_rayD_computeP(&ray, t0);
-                double p0x = dopoo_vec3D_getx(p0);
-                double p0y = dopoo_vec3D_gety(p0);
-                double p0z = dopoo_vec3D_getz(p0);
-                dopoo_vec3D n;
-                
-                if(fabs(p0x * p0x + p0z * p0z - r * r) < deltaD)
-                    n = (dopoo_vec3D){p0x, 0, p0z};
-                else if(p0y > h / 2)
-                    n = (dopoo_vec3D){0, 1, 0};
-                else
-                    n = (dopoo_vec3D){0, -1, 0};
-                
-                //n = dopoo_vec3D_minus(p0, (dopoo_vec3D){0, h/2, 0});
+                dopoo_vec3D n = dopoo_cylinder_computeNorm(h, r, p0);
                 n = dopoo_vec3D_norm(dopoo_mapD_applyRS(map, n));
-
                 double z = dopoo_vec3D_getz(n);
                 prgb = dopoo_vec3D_scale(rgb, z);
+            }
+            else if(dopoo_rayD_intersectCylinder(&ray, h+lineWidth, r+lineWidth, &t0, &t1))
+            {
+                prgb = lineRgb;
             }
             else
             {
