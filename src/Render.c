@@ -46,7 +46,7 @@ dopoo_cylinder_computeNorm(double h, double r, dopoo_vec3D p)
     
     if(fabs(px * px + pz * pz - r * r) < deltaD)
         n = (dopoo_vec3D){px, 0, pz};
-    else if(py > h / 2)
+    else if(py > 0)
         n = (dopoo_vec3D){0, 1, 0};
     else
         n = (dopoo_vec3D){0, -1, 0};
@@ -80,7 +80,7 @@ dopoo_render_cylinder(const dopoo_camera* camera, double h, double r, dopoo_mapD
                 double z = dopoo_vec3D_getz(n);
                 prgb = dopoo_vec3D_scale(rgb, z);
             }
-            else if(dopoo_rayD_intersectCylinder(&ray, h+lineWidth, r+lineWidth, &t0, &t1))
+            else if(dopoo_rayD_intersectCylinder(&ray, h+2*lineWidth, r+lineWidth, &t0, &t1))
             {
                 prgb = lineRgb;
             }

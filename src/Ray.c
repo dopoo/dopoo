@@ -76,14 +76,14 @@ dopoo_rayD_intersectCylinder(const dopoo_rayD* ray, double h, double r, double* 
         double dist = sqrt(px * px + pz * pz);
 		if(dist > r)
 		    return false;
-		*t0 = -py / dy;
-		*t1 = (h-py) / dy;
+		*t0 = (-h/2 - py) / dy;
+		*t1 = (h/2 - py) / dy;
 		if (*t0 > *t1) 
 		    dopoo_double_swap(t0, t1); 
 	}
 	else if (fabs(dy) < deltaD)      //case2 perpendicular
 	{
-		if(py > h || py < 0)
+		if(py > h/2 || py < -h/2)
 		    return false;
 		dopoo_vec3D c = {0, py, 0};
 		dopoo_vec3D cp = dopoo_vec3D_minus(ray->p, c);
@@ -100,8 +100,8 @@ dopoo_rayD_intersectCylinder(const dopoo_rayD* ray, double h, double r, double* 
 	}
 	else                            // case3 other
 	{
-       	double t00 = -py / dy;
-		double t10 = (h-py) / dy;
+       	double t00 = (-h/2 - py) / dy;
+		double t10 = (h/2 - py) / dy;
 		if(t00 > t10)
 		    dopoo_double_swap(&t00, &t10); 
 		dopoo_vec3D p0p1 = {0, h, 0};
