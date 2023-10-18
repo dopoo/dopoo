@@ -115,12 +115,12 @@ dopoo_rayD_intersectCylinder(const dopoo_rayD* ray, double h, double r, double* 
 		if(fabs(dx) > deltaD)
 		{
 			double _px = dopoo_vec3D_getx(_p);
-            pp2 = fabs(_px/dx); 
+            pp2 = -_px/dx; 
 		}
 		else
 		{
 			double _pz = dopoo_vec3D_getz(_p);
-            pp2 = fabs(_pz/dz); 
+            pp2 = -_pz/dz; 
 		}
 		
 		double p3p2 = sqrt(r * r - dist * dist) / sqrt(dx * dx + dz * dz);

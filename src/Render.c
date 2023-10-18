@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdio.h>
 #include "../inc/Camera.h"
 #include "../inc/Math.h"
 
