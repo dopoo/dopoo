@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "Vec.h" 
 #include "Map.h"
+#include "Box.h"
 
 typedef struct {
     dopoo_vec3D p, d, invD;
@@ -33,5 +34,8 @@ dopoo_rayD_intersectCylinder(const dopoo_rayD* ray, double h, double r, double* 
 
 void
 dopoo_rayD_applyInverse(dopoo_rayD* ray, dopoo_mapD* map);
+
+bool 
+dopoo_rayD_intersectBox(const dopoo_rayD* ray, const dopoo_boxD* box, double* t0, double* t1);
 
 #endif
