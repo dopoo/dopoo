@@ -4,9 +4,9 @@
 #include "Vec.h"
 
 typedef struct{
-    dopoo_vec3I min;
-    dopoo_vec3I max;
-} dopoo_BBoxI;
+    dopoo_vec3D min;
+    dopoo_vec3D max;
+} dopoo_BBoxD;
 
 
 #endif
