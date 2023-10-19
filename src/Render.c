@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "../inc/Camera.h"
 #include "../inc/Math.h"
+#include "../inc/Primitive.h"
 
 
 void
@@ -34,25 +35,6 @@ dopoo_render_sphere(const dopoo_camera* camera, dopoo_vec3D c, double r, dopoo_v
             (*(camera->film.pixel + j * width + i)) = dopoo_rgbI_fromVec(prgb);
         }//loop over image height
     }//loop over image width
-}
-
-dopoo_vec3D
-dopoo_cylinder_computeNorm(double h, double r, dopoo_vec3D p)
-{
-    double px = dopoo_vec3D_getx(p);
-    double py = dopoo_vec3D_gety(p);
-    double pz = dopoo_vec3D_getz(p);
-    dopoo_vec3D n;
-    
-    if(fabs(px * px + pz * pz - r * r) < deltaD)
-        n = (dopoo_vec3D){px, 0, pz};
-    else if(py > 0)
-        n = (dopoo_vec3D){0, 1, 0};
-    else
-        n = (dopoo_vec3D){0, -1, 0};
-    
-    //n = dopoo_vec3D_minus(p0, (dopoo_vec3D){0, h/2, 0});
-    return n;
 }
 
 void
