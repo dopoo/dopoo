@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdint.h>
 #include "../inc/List.h"
 
 dopoo_list*
@@ -8,6 +9,7 @@ dopoo_list_create(int32_t maxSize)
     list->size = 0;
     list->maxSize = maxSize;
     list->data = (void**)malloc(sizeof(void*) * maxSize);
+    return list;
 }
 
 void
