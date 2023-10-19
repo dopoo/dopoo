@@ -43,6 +43,16 @@ dopoo_link_getJoint(const dopoo_link* link, int32_t i)
     return dopoo_list_get(link->joints, i);
 }
 
+bool
+dopoo_link_intersect(const dopoo_link* link, dopoo_rayD* ray, dopoo_vec3D* n, bool* isLine)
+{
+
+
+    
+    return true;
+
+}
+
 
 
 
