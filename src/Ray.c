@@ -166,3 +166,13 @@ dopoo_rayD_intersectBox(const dopoo_rayD* ray, const dopoo_boxD* box, double* t0
     }
     return true;
 }
+
+bool 
+dopoo_rayD_intersectPlane(const dopoo_rayD* ray, dopoo_vec3D n, double d, double* t)
+{
+    const double cos = dopoo_vec3D_dot(ray->d, n);
+    if (fabs(cos) < deltaD)   //parallel
+        return false;
+    *t = (d - dopoo_vec3D_dot(ray->p, n))/cos;
+    return dopoo_rayD_test(ray, *t);
+}
