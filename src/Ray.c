@@ -145,20 +145,28 @@ dopoo_rayD_intersectCylinder(const dopoo_rayD* ray, double h, double r, double* 
 }
 
 bool 
-dopoo_rayD_intersectBox(const dopoo_rayD* ray, const dopoo_boxD* box, double* t0, double* t1)
+dopoo_rayD_intersectBox(const dopoo_rayD* ray, dopoo_vec3D min, dopoo_vec3D max, double* t0, double* t1)
 {
-    if(dopoo_boxD_isZero(box))
+    double minx = dopoo_vec3D_getx(min);
+    double miny = dopoo_vec3D_gety(min);
+    double minz = dopoo_vec3D_getz(min);
+    double maxx = dopoo_vec3D_getx(max);
+    double maxy = dopoo_vec3D_gety(max);
+    double maxz = dopoo_vec3D_getz(max);
+
+    if (minx >= maxx || miny >= maxy || minz >= maxz)
         return false;
+
     *t0 = ray->t0;
     *t1 = ray->t1;
-    double min[3] = {dopoo_vec3D_getx(box->min), dopoo_vec3D_gety(box->min), dopoo_vec3D_getz(box->min)};
-    double max[3] = {dopoo_vec3D_getx(box->max), dopoo_vec3D_gety(box->max), dopoo_vec3D_getz(box->max)};
+    double _min[3] = {minx, miny, minz};
+    double _max[3] = {maxx, maxy, maxz};
     double p[3]   = {dopoo_vec3D_getx(ray->p), dopoo_vec3D_gety(ray->p), dopoo_vec3D_getz(ray->p)};
     double d[3]   = {dopoo_vec3D_getx(ray->d), dopoo_vec3D_gety(ray->d), dopoo_vec3D_getz(ray->d)};
 
     for (int32_t i = 0; i < 3; ++i) {
-        double a = (min[i] - p[i]) / d[i];
-        double b = (max[i] - p[i]) / d[i];
+        double a = (_min[i] - p[i]) / d[i];
+        double b = (_max[i] - p[i]) / d[i];
         if (a > b) dopoo_double_swap(&a, &b);
         if (a > *t0) *t0 = a;
         if (b < *t1) *t1 = b;

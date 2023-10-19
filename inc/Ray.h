@@ -36,6 +36,6 @@ void
 dopoo_rayD_applyInverse(dopoo_rayD* ray, dopoo_mapD* map);
 
 bool 
-dopoo_rayD_intersectBox(const dopoo_rayD* ray, const dopoo_boxD* box, double* t0, double* t1);
+dopoo_rayD_intersectBox(const dopoo_rayD* ray, dopoo_vec3D min, dopoo_vec3D max, double* t0, double* t1);
 
 #endif
