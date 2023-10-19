@@ -30,7 +30,7 @@ dopoo_list_add(dopoo_list* list, void* node)
 }
 
 void*
-dopoo_list_get(dopoo_list* list, int32_t i)
+dopoo_list_get(const dopoo_list* list, int32_t i)
 {
     if(!list || i >= list->size)
         return NULL;
