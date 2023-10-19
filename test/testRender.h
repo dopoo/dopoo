@@ -1,5 +1,5 @@
-#ifndef __DOPOOTESTRender__
-#define __DOPOOTESTRender__
+#ifndef __DOPOOTESTRENDER__
+#define __DOPOOTESTRENDER__
 
 #include "../inc/Render.h"
 
@@ -47,7 +47,7 @@ dopoo_testRenderCylinder()
     dopoo_mapD map;
     dopoo_mapD_init(&map);
     map.r = dopoo_quatD_create(1,1,1,2);
-    //map.t = (dopoo_vec3D){0, -0.5, 0};
+    map.t = (dopoo_vec3D){0, 0, 0};
     dopoo_vec3D rgb = {1, 0, 1};
     dopoo_vec3D lineRgb = {0, 1, 0};
 
