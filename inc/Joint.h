@@ -13,5 +13,11 @@ typedef struct
     void* next;
 }dopoo_joint2;
 
+dopoo_joint2*
+dopoo_joint2_create(dopoo_vec3D c, double r, dopoo_rgbI rgb, void* prev, void* next);
+
+void
+dopoo_joint2_clear(dopoo_joint2* joint);
+
 
 #endif
