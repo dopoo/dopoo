@@ -1,13 +1,17 @@
 #ifndef __DOPOOPRIMITIVE__
 #define __DOPOOPRIMITIVE__
 
+#include <stdbool.h>
 #include "Map.h"
 #include "Spectrum.h"
+#include "Ray.h"
+
 
 typedef enum {
     SPHERE = 0,
     CYLINDER = 1,
-    CUBOID   = 2
+    CUBOID   = 2,
+    OTHER
 } dopoo_primitiveType;
 
 
@@ -54,5 +58,9 @@ dopoo_cylinder_clear(dopoo_cylinder* cylinder);
 
 void
 dopoo_cuboid_clear(dopoo_cuboid* cuboid);
+
+dopoo_vec3D
+dopoo_cylinder_computeNorm(double h, double r, dopoo_vec3D p);
+
 
 #endif
