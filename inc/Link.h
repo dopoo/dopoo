@@ -1,6 +1,8 @@
 #ifndef __DOPOOLINK__
 #define __DOPOOLINK__
 
+#include <stdbool.h>
+#include "Ray.h"
 #include "List.h"
 
 typedef struct
