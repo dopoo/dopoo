@@ -184,3 +184,38 @@ dopoo_rayD_intersectPlane(const dopoo_rayD* ray, dopoo_vec3D n, double d, double
     *t = (d - dopoo_vec3D_dot(ray->p, n))/cos;
     return dopoo_rayD_test(ray, *t);
 }
+
+bool
+dopoo_rayD_intersectCone(const dopoo_rayD* ray, double h, double r0, double r1, double* t0, double* t1)
+{
+    double px = dopoo_vec3D_getx(ray->p);
+    double py = dopoo_vec3D_gety(ray->p);
+    double pz = dopoo_vec3D_getz(ray->p);
+    double dx = dopoo_vec3D_getx(ray->d);
+    double dy = dopoo_vec3D_gety(ray->d);
+    double dz = dopoo_vec3D_getz(ray->d);
+    if(fabs(dy) < deltaD)
+    {
+        if(py > h/2 || py < -h/2)
+            return false;
+        dopoo_vec3D c = {0, py, 0};
+        dopoo_vec3D cp = dopoo_vec3D_minus(ray->p, c);
+        double distSqr = dopoo_vec3D_lengthSqr(dopoo_vec3D_cross(cp, ray->d));
+        double r = r0 + (r1 - r0) * (py + h/2) / h;
+        double rSqr = r * r;
+        if(distSqr > rSqr)
+            return false;
+        double pp2 = sqrt(dopoo_vec3D_lengthSqr(cp) - distSqr);
+        double p3p2 = sqrt(rSqr - distSqr);
+        double p4p2 = p3p2;
+        *t0 = pp2 - p3p2;
+        *t1 = pp2 + p4p2;
+        if (*t0 > *t1) return false;
+    } 
+    else
+    {
+
+    }
+
+    return true;
+}

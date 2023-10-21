@@ -41,6 +41,16 @@ typedef struct
     dopoo_mapD map;
 }dopoo_cuboid;
 
+typedef struct
+{
+    dopoo_primitiveType type;
+    double h;
+    double r0;
+    double r1;
+    dopoo_rgbI rgb;
+    dopoo_mapD map;
+}dopoo_cone;
+
 dopoo_sphere*
 dopoo_sphere_create(dopoo_vec3D c, double r, dopoo_rgbI rgb);
 
