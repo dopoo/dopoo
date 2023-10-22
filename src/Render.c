@@ -75,3 +75,42 @@ dopoo_render_cylinder(const dopoo_camera* camera, double h, double r, dopoo_mapD
         }//loop over image height
     }//loop over image width
 }
+
+void
+dopoo_render_cone(const dopoo_camera* camera, double h, double r0, double r1, dopoo_mapD* map, dopoo_vec3D rgb, dopoo_vec3D lineRgb)
+{
+    dopoo_rayD ray;
+
+    int32_t width = camera->film.width;
+    int32_t height = camera->film.height;
+    dopoo_vec3D prgb;
+    double t0, t1;
+    double lineWidth = 0.01;
+
+    for (int32_t j=0; j < height; ++j) {
+        for (int32_t i=0; i < width; ++i) {
+            double x = 0; 
+            double y = 0;
+            dopoo_camera_getRay(camera, &ray, i, j, x, y);
+            dopoo_rayD_applyInverse(&ray, map);
+            if(dopoo_rayD_intersectCone(&ray, h, r0, r1, &t0, &t1))
+            {
+                dopoo_vec3D p0 = dopoo_rayD_computeP(&ray, t0);
+                dopoo_vec3D n = dopoo_cone_computeNorm(h, r0, r1, p0);
+                n = dopoo_vec3D_norm(dopoo_mapD_applyRS(map, n));
+                double z = dopoo_vec3D_getz(n);
+                prgb = dopoo_vec3D_scale(rgb, z);
+            }
+            else if(dopoo_rayD_intersectCone(&ray, h+2*lineWidth, r0+lineWidth, r1 + lineWidth, &t0, &t1))
+            {
+                prgb = lineRgb;
+            }
+            else
+            {
+                prgb = (dopoo_vec3D){0, 0, 0};
+            }
+            
+            (*(camera->film.pixel + j * width + i)) = dopoo_rgbI_fromVec(prgb);
+        }//loop over image height
+    }//loop over image width
+}

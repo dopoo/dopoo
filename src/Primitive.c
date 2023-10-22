@@ -76,6 +76,65 @@ dopoo_cylinder_computeNorm(double h, double r, dopoo_vec3D p)
     return n;
 }
 
+dopoo_vec3D
+dopoo_cone_computeIntersect(double h, double r0, double r1, dopoo_vec3D pmin, dopoo_vec3D pmax)
+{
+    int32_t iter = 0;
+    const int32_t maxIter = 10;
+    do{
+        dopoo_vec3D pm = dopoo_vec3D_scale(dopoo_vec3D_add(pmin, pmax), 0.5);
+        double pmx = dopoo_vec3D_getx(pm);
+        double pmy = dopoo_vec3D_gety(pm);
+        double pmz = dopoo_vec3D_getz(pm);
+        double rm = sqrt(pmx * pmx + pmz * pmz);
+        double r = r0 + (r1 - r0) * (pmy + h/2) / h;
+        if(fabs(rm - r) < deltaD || iter < maxIter)
+        {
+            return pm;
+        }
+        else if (rm > r) // outside
+        {
+            pmax = pm;
+        }
+        else if (rm < r) // inside
+        {
+            pmin = pm;
+        }
+        iter++;
+    }while(true);
+
+    return (dopoo_vec3D){0, 0, 0};
+}
+
+dopoo_vec3D
+dopoo_cone_computeNorm(double h, double r0, double r1, dopoo_vec3D p)
+{
+    double px = dopoo_vec3D_getx(p);
+    double py = dopoo_vec3D_gety(p);
+    double pz = dopoo_vec3D_getz(p);
+    dopoo_vec3D n;
+    
+    if(fabs(py - h/2) < deltaD)
+    {
+        n = (dopoo_vec3D){0, 1, 0};
+    }
+    else if (fabs(py + h/2) < deltaD)
+    {
+        n = (dopoo_vec3D){0, -1, 0};
+    }
+    else
+    {
+        dopoo_vec3D p0p1 = {0, h, 0};
+        dopoo_vec3D p2 = {0, -h/2 - (h * r0)/(r1 - r0), 0};
+        dopoo_vec3D pp2 = dopoo_vec3D_minus(p2, p);
+        dopoo_vec3D np = dopoo_vec3D_cross(p0p1, pp2);
+        n = dopoo_vec3D_cross(np, pp2);
+        n = dopoo_vec3D_norm(n);
+    }
+
+    return n;
+}
+
 bool
 dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, bool* isLine)
 {

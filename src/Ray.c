@@ -2,6 +2,7 @@
 #include <math.h>
 #include "../inc/Ray.h"
 #include "../inc/Math.h"
+#include "../inc/Primitive.h"
 
 void 
 dopoo_rayD_setP(dopoo_rayD* ray, dopoo_vec3D p)
@@ -194,7 +195,25 @@ dopoo_rayD_intersectCone(const dopoo_rayD* ray, double h, double r0, double r1, 
     double dx = dopoo_vec3D_getx(ray->d);
     double dy = dopoo_vec3D_gety(ray->d);
     double dz = dopoo_vec3D_getz(ray->d);
-    if(fabs(dy) < deltaD)
+
+    if(fabs(fabs(dy) - 1) < deltaD)  //case 1 parellel
+    {
+        double dist = sqrt(px * px + pz * pz);
+        if(dist > r1)
+            return false;
+        else if (dist <= r0)
+        {
+            *t0 = (-h/2 - py) / dy;
+        }
+        else
+        {
+            *t0 = (-h/2 - py) / dy + (dist - r0) * h / ((r1 - r0) * dy);
+        }
+        *t1 = (h/2 - py) / dy;
+        if (*t0 > *t1) 
+            dopoo_double_swap(t0, t1); 
+    }
+    else if(fabs(dy) < deltaD)
     {
         if(py > h/2 || py < -h/2)
             return false;
@@ -210,11 +229,93 @@ dopoo_rayD_intersectCone(const dopoo_rayD* ray, double h, double r0, double r1, 
         double p4p2 = p3p2;
         *t0 = pp2 - p3p2;
         *t1 = pp2 + p4p2;
+        *t0 = max(*t0, ray->t0);
+        *t1 = min(*t1, ray->t1);
         if (*t0 > *t1) return false;
     } 
     else
     {
+        double tc0 = (-h/2 - py) / dy;
+        double tc1 = ( h/2 - py) / dy;
+        dopoo_vec3D pc0 = dopoo_rayD_computeP(ray, tc0);
+        dopoo_vec3D pc1 = dopoo_rayD_computeP(ray, tc1);
+        double pc0x = dopoo_vec3D_getx(pc0);
+        double pc0z = dopoo_vec3D_getz(pc0);
+        double pc1x = dopoo_vec3D_getx(pc1);
+        double pc1z = dopoo_vec3D_getz(pc1);
+        double rc0 = sqrt(pc0x * pc0x + pc0z * pc0z);
+        double rc1 = sqrt(pc1x * pc1x + pc1z * pc1z);
 
+        if(rc0 <= r0 && rc1 <= r1) // two on circle
+        {
+            if(tc0 > tc1)
+                dopoo_double_swap(&tc0, &tc1); 
+            *t0 = tc0;
+            *t1 = tc1;
+        }
+        else if (rc0 <= r0)   // one on circle
+        {
+            dopoo_vec3D pm = dopoo_cone_computeIntersect(h, r0, r1, pc0, pc1);
+            double pmy = dopoo_vec3D_gety(pm);
+            *t0 = tc0;
+            *t1 = (pmy - py) / dy;
+            if(*t0 > *t1)
+                dopoo_double_swap(t0, t1);
+        }
+        else if (rc1 <= r1)     // one on circle
+        {
+            dopoo_vec3D pm = dopoo_cone_computeIntersect(h, r0, r1, pc1, pc0);
+            double pmy = dopoo_vec3D_gety(pm);
+            *t0 = tc0;
+            *t1 = (pmy - py) / dy;
+            if(*t0 > *t1)
+                dopoo_double_swap(t0, t1);
+        }
+        else        // not on circle
+        {
+            dopoo_vec3D p0p1 = {0, h, 0};
+            dopoo_vec3D n = dopoo_vec3D_norm(dopoo_vec3D_cross(p0p1, ray->d));
+            dopoo_vec3D p0p = ray->p;
+            double dist = dopoo_vec3D_dot(p0p, n);
+            dopoo_vec3D _p = dopoo_vec3D_minus(ray->p, dopoo_vec3D_scale(n, dist));
+            double pp2;
+            if(fabs(dx) > deltaD)
+            {
+                double _px = dopoo_vec3D_getx(_p);
+                pp2 = -_px/dx; 
+            }
+            else
+            {
+                double _pz = dopoo_vec3D_getz(_p);
+                pp2 = -_pz/dz; 
+            }
+            if(pp2 < 0)
+                return false;
+
+            dopoo_vec3D pi = dopoo_rayD_computeP(ray, pp2);
+            double pix = dopoo_vec3D_getx(pi);
+            double piy = dopoo_vec3D_gety(pi);
+            double piz = dopoo_vec3D_getz(pi);
+            double ri = sqrt(pix * pix + piz * piz);
+            double r = r0 + (r1 - r0) * (piy + h/2) / h;
+            if(fabs(ri - r) < deltaD)
+            {
+                *t0 = *t1 = (piy - py) / dy;
+                if(*t0 < 0)
+                    return false;
+            }
+            else
+            {
+                dopoo_vec3D pm0 = dopoo_cone_computeIntersect(h, r0, r1, pi, pc0);
+                dopoo_vec3D pm1 = dopoo_cone_computeIntersect(h, r0, r1, pi, pc1);
+                double pm0y = dopoo_vec3D_gety(pm0);
+                double pm1y = dopoo_vec3D_gety(pm1);
+                *t0 = (pm0y - py) / dy;
+                *t1 = (pm1y - py) / dy;
+                if(*t0 > *t1)
+                    dopoo_double_swap(t0, t1);
+            }
+        }   
     }
 
     return true;
