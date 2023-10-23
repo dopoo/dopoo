@@ -81,6 +81,7 @@ dopoo_cone_computeIntersect(double h, double r0, double r1, dopoo_vec3D pmin, do
 {
     int32_t iter = 0;
     const int32_t maxIter = 10;
+    double delta = 1e-3;
     do{
         dopoo_vec3D pm = dopoo_vec3D_scale(dopoo_vec3D_add(pmin, pmax), 0.5);
         double pmx = dopoo_vec3D_getx(pm);
@@ -88,7 +89,7 @@ dopoo_cone_computeIntersect(double h, double r0, double r1, dopoo_vec3D pmin, do
         double pmz = dopoo_vec3D_getz(pm);
         double rm = sqrt(pmx * pmx + pmz * pmz);
         double r = r0 + (r1 - r0) * (pmy + h/2) / h;
-        if(fabs(rm - r) < deltaD || iter < maxIter)
+        if(fabs(rm - r) < delta || iter > maxIter)
         {
             return pm;
         }

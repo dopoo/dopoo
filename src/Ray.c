@@ -196,6 +196,14 @@ dopoo_rayD_intersectCone(const dopoo_rayD* ray, double h, double r0, double r1, 
     double dy = dopoo_vec3D_gety(ray->d);
     double dz = dopoo_vec3D_getz(ray->d);
 
+    dopoo_vec3D min = {-r1, -h/2, -r1};
+    dopoo_vec3D max = { r1,  h/2, r1};
+    
+    double tb0, tb1;
+    bool interBox = dopoo_rayD_intersectBox(ray, min, max, &tb0, &tb1);
+    if(!interBox)
+        return false;
+
     if(fabs(fabs(dy) - 1) < deltaD)  //case 1 parellel
     {
         double dist = sqrt(px * px + pz * pz);
@@ -255,7 +263,9 @@ dopoo_rayD_intersectCone(const dopoo_rayD* ray, double h, double r0, double r1, 
         }
         else if (rc0 <= r0)   // one on circle
         {
-            dopoo_vec3D pm = dopoo_cone_computeIntersect(h, r0, r1, pc0, pc1);
+            dopoo_vec3D pmin = pc0;
+            dopoo_vec3D pmax=  dopoo_rayD_computeP(ray, min(max(tc1, tb0), tb1));
+            dopoo_vec3D pm = dopoo_cone_computeIntersect(h, r0, r1, pmin, pmax);
             double pmy = dopoo_vec3D_gety(pm);
             *t0 = tc0;
             *t1 = (pmy - py) / dy;
@@ -264,9 +274,11 @@ dopoo_rayD_intersectCone(const dopoo_rayD* ray, double h, double r0, double r1, 
         }
         else if (rc1 <= r1)     // one on circle
         {
-            dopoo_vec3D pm = dopoo_cone_computeIntersect(h, r0, r1, pc1, pc0);
+            dopoo_vec3D pmin = pc1;
+            dopoo_vec3D pmax = dopoo_rayD_computeP(ray, min(max(tc0, tb0), tb1));
+            dopoo_vec3D pm = dopoo_cone_computeIntersect(h, r0, r1, pmin, pmax);
             double pmy = dopoo_vec3D_gety(pm);
-            *t0 = tc0;
+            *t0 = tc1;
             *t1 = (pmy - py) / dy;
             if(*t0 > *t1)
                 dopoo_double_swap(t0, t1);
@@ -298,6 +310,8 @@ dopoo_rayD_intersectCone(const dopoo_rayD* ray, double h, double r0, double r1, 
             double piz = dopoo_vec3D_getz(pi);
             double ri = sqrt(pix * pix + piz * piz);
             double r = r0 + (r1 - r0) * (piy + h/2) / h;
+            if(ri > r || piy > h/2 || piy < -h/2)
+                return false;
             if(fabs(ri - r) < deltaD)
             {
                 *t0 = *t1 = (piy - py) / dy;
@@ -306,8 +320,11 @@ dopoo_rayD_intersectCone(const dopoo_rayD* ray, double h, double r0, double r1, 
             }
             else
             {
-                dopoo_vec3D pm0 = dopoo_cone_computeIntersect(h, r0, r1, pi, pc0);
-                dopoo_vec3D pm1 = dopoo_cone_computeIntersect(h, r0, r1, pi, pc1);
+                dopoo_vec3D pmin = pi;
+                dopoo_vec3D pmax0 = dopoo_rayD_computeP(ray, min(max(tc0, tb0), tb1));
+                dopoo_vec3D pmax1 = dopoo_rayD_computeP(ray, min(max(tc1, tb0), tb1));
+                dopoo_vec3D pm0 = dopoo_cone_computeIntersect(h, r0, r1, pmin, pmax0);
+                dopoo_vec3D pm1 = dopoo_cone_computeIntersect(h, r0, r1, pmin, pmax1);
                 double pm0y = dopoo_vec3D_gety(pm0);
                 double pm1y = dopoo_vec3D_gety(pm1);
                 *t0 = (pm0y - py) / dy;
