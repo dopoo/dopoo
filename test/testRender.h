@@ -76,7 +76,7 @@ dopoo_testRenderCone()
     double r1 = 0.5;
     dopoo_mapD map;
     dopoo_mapD_init(&map);
-    map.r = dopoo_quatD_create(-1, 0, 0,0.25);
+    map.r = dopoo_quatD_create(1, 0, 1, 0.25);
     //map.t = (dopoo_vec3D){0, 0, 0};
     dopoo_vec3D rgb = {1, 0, 1};
     dopoo_vec3D lineRgb = {0, 1, 0};
