@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <math.h>
+#include <float.h>
 #include "../inc/Ray.h"
 #include "../inc/Math.h"
 #include "../inc/Primitive.h"
@@ -337,3 +338,132 @@ dopoo_rayD_intersectCone(const dopoo_rayD* ray, double h, double r0, double r1, 
 
     return true;
 }
+
+bool
+dopoo_rayD_intersectPyra(const dopoo_rayD* ray, double h, double w0, double w1, double d0, double d1, double* t0, double* t1)
+{
+    double w = max(w0, w1);
+    double d = max(d0, d1);
+    dopoo_vec3D min = {-w/2, -h/2, -d/2};
+    dopoo_vec3D max = { w/2,  h/2, d/2};
+    
+    double tb0, tb1;
+    bool interBox = dopoo_rayD_intersectBox(ray, min, max, &tb0, &tb1);
+    if(!interBox)
+        return false;
+
+    dopoo_vec3D n0 = {0, -1, 0};
+    dopoo_vec3D p0 = {0, -h/2, 0};
+    dopoo_vec3D n1 = {0, 1, 0};
+    dopoo_vec3D p1 = {0, h/2, 0};
+    dopoo_vec3D v0 = {0, 0, -1};
+    dopoo_vec3D v1 = {(w1 - w0) / 2, -h, (d0 - d1) / 2};  
+    dopoo_vec3D n2 = dopoo_vec3D_norm(dopoo_vec3D_cross(v0, v1));
+    dopoo_vec3D p2 = {-w0/2, -h/2, d0/2};
+    v1 = (dopoo_vec3D){(w1 - w0) / 2, h, (d1 - d0) / 2};  
+    dopoo_vec3D n3 = dopoo_vec3D_norm(dopoo_vec3D_cross(v0, v1));
+    dopoo_vec3D p3 = {w0/2, -h/2, d0/2};
+    v0 = (dopoo_vec3D){1, 0, 0};
+    v1 = (dopoo_vec3D){(w1 - w0) / 2, -h, (d0 - d1) / 2};  
+    dopoo_vec3D n4 = dopoo_vec3D_norm(dopoo_vec3D_cross(v0, v1));
+    dopoo_vec3D p4 = {-w0/2, -h/2, d0/2};
+    v1 = (dopoo_vec3D){(w1 - w0) / 2, -h, (d1 - d0) / 2};  
+    dopoo_vec3D n5 = dopoo_vec3D_norm(dopoo_vec3D_cross(v0, v1));
+    dopoo_vec3D p5 = {-w0/2, -h/2, -d0/2};
+
+    double _d0 = dopoo_vec3D_dot(n0, p0);
+    double _d1 = dopoo_vec3D_dot(n1, p1);
+    double _d2 = dopoo_vec3D_dot(n2, p2);
+    double _d3 = dopoo_vec3D_dot(n3, p3);
+    double _d4 = dopoo_vec3D_dot(n4, p4);
+    double _d5 = dopoo_vec3D_dot(n5, p5);
+
+    double t;
+    bool intersect = false;
+    *t0 = DBL_MAX;
+    *t1 = -DBL_MAX;
+    if(dopoo_rayD_intersectPlane(ray, n0, _d0, &t))
+    {
+        dopoo_vec3D p2 = dopoo_rayD_computeP(ray, t);
+        double p2x = dopoo_vec3D_getx(p2);
+        double p2z = dopoo_vec3D_getz(p2);
+        if(p2x >= -w0/2 && p2x <= w0/2 && p2z >= -d0/2 && p2z <= d0/2)
+        {
+            *t0 = min(*t0, t);
+            *t1 = max(*t1, t);
+            intersect = true;
+        }
+    }
+
+    if(dopoo_rayD_intersectPlane(ray, n1, _d1, &t))
+    {
+        dopoo_vec3D p2 = dopoo_rayD_computeP(ray, t);
+        double p2x = dopoo_vec3D_getx(p2);
+        double p2z = dopoo_vec3D_getz(p2);
+        if(p2x >= -w1/2 && p2x <= w1/2 && p2z >= -d1/2 && p2z <= d1/2)
+        {
+            *t0 = min(*t0, t);
+            *t1 = max(*t1, t);
+            intersect = true;
+        }
+    }
+
+    if(dopoo_rayD_intersectPlane(ray, n2, _d2, &t))
+    {
+        dopoo_vec3D p2 = dopoo_rayD_computeP(ray, t);
+        double p2y = dopoo_vec3D_gety(p2);
+        double p2z = dopoo_vec3D_getz(p2);
+        double zm = d0/2 + (d1 - d0) * (p2y + h/2) / (2 * h);
+        if(p2z >= -zm && p2z <= zm)
+        {
+            *t0 = min(*t0, t);
+            *t1 = max(*t1, t);
+            intersect = true;
+        }
+    }
+
+    if(dopoo_rayD_intersectPlane(ray, n3, _d3, &t))
+    {
+        dopoo_vec3D p2 = dopoo_rayD_computeP(ray, t);
+        double p2y = dopoo_vec3D_gety(p2);
+        double p2z = dopoo_vec3D_getz(p2);
+        double zm = d0/2 + (d1 - d0) * (p2y + h/2) / (2 * h);
+        if(p2z >= -zm && p2z <= zm)
+        {
+            *t0 = min(*t0, t);
+            *t1 = max(*t1, t);
+            intersect = true;
+        }
+    }
+
+    if(dopoo_rayD_intersectPlane(ray, n4, _d4, &t))
+    {
+        dopoo_vec3D p2 = dopoo_rayD_computeP(ray, t);
+        double p2y = dopoo_vec3D_gety(p2);
+        double p2x = dopoo_vec3D_getx(p2);
+        double xm = w0/2 + (w1 - w0) * (p2y + h/2) / (2 * h);
+        if(p2x >= -xm && p2x <= xm)
+        {
+            *t0 = min(*t0, t);
+            *t1 = max(*t1, t);
+            intersect = true;
+        }
+    }
+
+    if(dopoo_rayD_intersectPlane(ray, n5, _d5, &t))
+    {
+        dopoo_vec3D p2 = dopoo_rayD_computeP(ray, t);
+        double p2y = dopoo_vec3D_gety(p2);
+        double p2x = dopoo_vec3D_getx(p2);
+        double xm = w0/2 + (w1 - w0) * (p2y + h/2) / (2 * h);
+        if(p2x >= -xm && p2x <= xm)
+        {
+            *t0 = min(*t0, t);
+            *t1 = max(*t1, t);
+            intersect = true;
+        }
+    }
+
+    return intersect;
+}
+
