@@ -136,6 +136,45 @@ dopoo_cone_computeNorm(double h, double r0, double r1, dopoo_vec3D p)
     return n;
 }
 
+dopoo_vec3D
+dopoo_pyra_computeNorm(double h, double w0, double w1, double d0, double d1, dopoo_vec3D p)
+{
+    dopoo_vec3D n0 = {0, -1, 0};
+    dopoo_vec3D p0 = {0, -h/2, 0};
+    dopoo_vec3D n1 = {0, 1, 0};
+    dopoo_vec3D p1 = {0, h/2, 0};
+    dopoo_vec3D v0 = {0, 0, -1};
+    dopoo_vec3D v1 = {(w1 - w0) / 2, -h, (d0 - d1) / 2};  
+    dopoo_vec3D n2 = dopoo_vec3D_norm(dopoo_vec3D_cross(v0, v1));
+    dopoo_vec3D p2 = {-w0/2, -h/2, d0/2};
+    v1 = (dopoo_vec3D){(w1 - w0) / 2, h, (d1 - d0) / 2};  
+    dopoo_vec3D n3 = dopoo_vec3D_norm(dopoo_vec3D_cross(v0, v1));
+    dopoo_vec3D p3 = {w0/2, -h/2, d0/2};
+    v0 = (dopoo_vec3D){1, 0, 0};
+    v1 = (dopoo_vec3D){(w1 - w0) / 2, -h, (d0 - d1) / 2};  
+    dopoo_vec3D n4 = dopoo_vec3D_norm(dopoo_vec3D_cross(v0, v1));
+    dopoo_vec3D p4 = {-w0/2, -h/2, d0/2};
+    v1 = (dopoo_vec3D){(w1 - w0) / 2, -h, (d1 - d0) / 2};  
+    dopoo_vec3D n5 = dopoo_vec3D_norm(dopoo_vec3D_cross(v0, v1));
+    dopoo_vec3D p5 = {-w0/2, -h/2, -d0/2};
+
+    double py = dopoo_vec3D_gety(p);
+    if(fabs(py + h/2) < deltaD)
+        return n0;
+    else if (fabs(py - h/2) < deltaD)
+        return n1;
+    else if(fabs(dopoo_vec3D_dot(dopoo_vec3D_minus(p, p2), n2)) < deltaD)
+        return n2;
+    else if(fabs(dopoo_vec3D_dot(dopoo_vec3D_minus(p, p3), n3)) < deltaD)
+        return n3;
+    else if(fabs(dopoo_vec3D_dot(dopoo_vec3D_minus(p, p4), n4)) < deltaD)
+        return n4;
+    else if(fabs(dopoo_vec3D_dot(dopoo_vec3D_minus(p, p5), n5)) < deltaD)
+        return n5;
+
+    return (dopoo_vec3D){0,0,0};
+}
+
 bool
 dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, bool* isLine)
 {
