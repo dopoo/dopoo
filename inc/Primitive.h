@@ -98,4 +98,7 @@ dopoo_pyra_computeNorm(double h, double w0, double w1, double d0, double d1, dop
 void
 dopoo_prim_clear(void* prim);
 
+bool
+dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* t);
+
 #endif
