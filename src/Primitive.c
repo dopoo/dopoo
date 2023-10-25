@@ -39,6 +39,34 @@ dopoo_cuboid_create(dopoo_vec3D min, dopoo_vec3D max, dopoo_rgbI rgb)
     return cuboid;
 }
 
+dopoo_cone*
+dopoo_cone_create(double h, double r0, double r1, dopoo_rgbI rgb)
+{
+    dopoo_cone* cone = (dopoo_cone*)malloc(sizeof(dopoo_cone));
+    cone->type = CONE;
+    cone->h = h;
+    cone->r0 = r0;
+    cone->r1 = r1;
+    cone->rgb = rgb;
+    dopoo_mapD_init(&(cone->map));
+    return cone;
+}
+
+dopoo_pyra*
+dopoo_pyra_create(double h, double w0, double w1, double d0, double d1, dopoo_rgbI rgb)
+{
+    dopoo_pyra* pyra = (dopoo_pyra*)malloc(sizeof(dopoo_pyra));
+    pyra->type = PYRA;
+    pyra->h = h;
+    pyra->w0 = w0;
+    pyra->w1 = w1;
+    pyra->d0 = d0;
+    pyra->d1 = d1;
+    pyra->rgb = rgb;
+    dopoo_mapD_init(&(pyra->map));
+    return pyra;
+}
+
 void
 dopoo_sphere_clear(dopoo_sphere* sphere)
 {
@@ -57,23 +85,16 @@ dopoo_cuboid_clear(dopoo_cuboid* cuboid)
     free(cuboid);
 }
 
-dopoo_vec3D
-dopoo_cylinder_computeNorm(double h, double r, dopoo_vec3D p)
+void
+dopoo_cone_clear(dopoo_cone* cone)
 {
-    double px = dopoo_vec3D_getx(p);
-    double py = dopoo_vec3D_gety(p);
-    double pz = dopoo_vec3D_getz(p);
-    dopoo_vec3D n;
-    
-    if(fabs(px * px + pz * pz - r * r) < deltaD)
-        n = (dopoo_vec3D){px, 0, pz};
-    else if(py > 0)
-        n = (dopoo_vec3D){0, 1, 0};
-    else
-        n = (dopoo_vec3D){0, -1, 0};
-    
-    //n = dopoo_vec3D_minus(p0, (dopoo_vec3D){0, h/2, 0});
-    return n;
+    free(cone);
+}
+
+void
+dopoo_pyra_clear(dopoo_pyra* pyra)
+{
+    free(pyra);
 }
 
 dopoo_vec3D
@@ -105,6 +126,66 @@ dopoo_cone_computeIntersect(double h, double r0, double r1, dopoo_vec3D pmin, do
     }while(true);
 
     return (dopoo_vec3D){0, 0, 0};
+}
+
+dopoo_vec3D
+dopoo_cuboid_computeNorm(dopoo_vec3D min, dopoo_vec3D max, dopoo_vec3D p)
+{
+    dopoo_vec3D n = {0, 0, 0};
+    double px = dopoo_vec3D_getx(p);
+    double py = dopoo_vec3D_gety(p);
+    double pz = dopoo_vec3D_getz(p);
+    double minx = dopoo_vec3D_getx(min);
+    double miny = dopoo_vec3D_gety(min);
+    double minz = dopoo_vec3D_getz(min);
+    double maxx = dopoo_vec3D_getx(max);
+    double maxy = dopoo_vec3D_gety(max);
+    double maxz = dopoo_vec3D_getz(max);
+    if(fabs(px - minx) < deltaD)
+    {
+        n = (dopoo_vec3D){-1, 0, 0};
+    }
+    else if(fabs(px - maxx) < deltaD)
+    {
+        n = (dopoo_vec3D){1, 0, 0};
+    }
+    else if(fabs(py - miny) < deltaD)
+    {
+        n = (dopoo_vec3D){0, -1, 0};
+    }
+    else if(fabs(py - maxy) < deltaD)
+    {
+        n = (dopoo_vec3D){0, 1, 0};
+    }
+    else if(fabs(pz - minz) < deltaD)
+    {
+        n = (dopoo_vec3D){0, 0, -1};
+    }
+    else if(fabs(pz - maxz) < deltaD)
+    {
+        n = (dopoo_vec3D){0, 0, 1};
+    }
+
+    return n;
+}
+
+dopoo_vec3D
+dopoo_cylinder_computeNorm(double h, double r, dopoo_vec3D p)
+{
+    double px = dopoo_vec3D_getx(p);
+    double py = dopoo_vec3D_gety(p);
+    double pz = dopoo_vec3D_getz(p);
+    dopoo_vec3D n;
+    
+    if(fabs(px * px + pz * pz - r * r) < deltaD)
+        n = (dopoo_vec3D){px, 0, pz};
+    else if(py > 0)
+        n = (dopoo_vec3D){0, 1, 0};
+    else
+        n = (dopoo_vec3D){0, -1, 0};
+    
+    //n = dopoo_vec3D_minus(p0, (dopoo_vec3D){0, h/2, 0});
+    return n;
 }
 
 dopoo_vec3D
@@ -235,41 +316,7 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, bool* is
             if(dopoo_rayD_intersectBox(ray, cuboid->min, cuboid->max, &t0, &t1))
             {
                 dopoo_vec3D p0 = dopoo_rayD_computeP(ray, t0);
-                double p0x = dopoo_vec3D_getx(p0);
-                double p0y = dopoo_vec3D_gety(p0);
-                double p0z = dopoo_vec3D_getz(p0);
-                double minx = dopoo_vec3D_getx(cuboid->min);
-                double miny = dopoo_vec3D_gety(cuboid->min);
-                double minz = dopoo_vec3D_getz(cuboid->min);
-                double maxx = dopoo_vec3D_getx(cuboid->max);
-                double maxy = dopoo_vec3D_gety(cuboid->max);
-                double maxz = dopoo_vec3D_getz(cuboid->max);
-
-                if(fabs(p0x - minx) < deltaD)
-                {
-                    *n = (dopoo_vec3D){-1, 0, 0};
-                }
-                else if(fabs(p0x - maxx) < deltaD)
-                {
-                    *n = (dopoo_vec3D){1, 0, 0};
-                }
-                else if(fabs(p0y - miny) < deltaD)
-                {
-                    *n = (dopoo_vec3D){0, -1, 0};
-                }
-                else if(fabs(p0y - maxy) < deltaD)
-                {
-                    *n = (dopoo_vec3D){0, 1, 0};
-                }
-                else if(fabs(p0z - minz) < deltaD)
-                {
-                    *n = (dopoo_vec3D){0, 0, -1};
-                }
-                else if(fabs(p0z - maxz) < deltaD)
-                {
-                    *n = (dopoo_vec3D){0, 0, 1};
-                }
-
+                *n = dopoo_cuboid_computeNorm(cuboid->min, cuboid->max, p0);
                 *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(cuboid->map), *n));
                 return true;
             }
@@ -283,7 +330,74 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, bool* is
                 return false;
             }
         }
+
+        case CONE:
+        {
+            dopoo_cone* cone = (dopoo_cone*)(prim);
+            dopoo_rayD_applyInverse(ray, &(cone->map));
+            if(dopoo_rayD_intersectCone(ray, cone->h, cone->r0, cone->r1, &t0, &t1))
+            {
+                dopoo_vec3D p0 = dopoo_rayD_computeP(ray, t0);
+                *n = dopoo_cone_computeNorm(cone->h, cone->r0, cone->r1, p0);
+                *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(cone->map), *n));
+                return true;
+            }
+            else if (dopoo_rayD_intersectCone(ray, cone->h + 2 * lineWidth, cone->r0 + lineWidth, cone->r1 + lineWidth, &t0, &t1))
+            {
+                *isLine = true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        case PYRA:
+        {
+            dopoo_pyra* pyra = (dopoo_pyra*)(prim);
+            dopoo_rayD_applyInverse(ray, &(pyra->map));
+            if(dopoo_rayD_intersectPyra(ray, pyra->h, pyra->w0, pyra->w1, pyra->d0, pyra->d1, &t0, &t1))
+            {
+                dopoo_vec3D p0 = dopoo_rayD_computeP(ray, t0);
+                *n = dopoo_pyra_computeNorm(pyra->h, pyra->w0, pyra->w1, pyra->d0, pyra->d1, p0);
+                *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(pyra->map), *n));
+                return true;
+            }
+            else if (dopoo_rayD_intersectPyra(ray, pyra->h + 2 * lineWidth, pyra->w0  + 2 * lineWidth, pyra->w1 + 2 * lineWidth, 
+                                              pyra->d0 + 2 * lineWidth, pyra->d1 + 2 * lineWidth, &t0, &t1))
+            {
+                *isLine = true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         default:
         return false;
+    }
+}
+
+void
+dopoo_prim_clear(void* prim)
+{
+    dopoo_primitiveType type = *((dopoo_primitiveType*)prim);
+    switch(type)
+    {
+        case SPHERE:
+            return dopoo_sphere_clear((dopoo_sphere*)(prim));
+        case CYLINDER:
+            return dopoo_cylinder_clear((dopoo_cylinder*)(prim));
+        case CUBOID:
+            return dopoo_cuboid_clear((dopoo_cuboid*)(prim));
+        case CONE:
+            return dopoo_cone_clear((dopoo_cone*)(prim));
+        case PYRA:
+            return dopoo_pyra_clear((dopoo_pyra*)(prim));
+        default:
+            break;
     }
 }

@@ -11,7 +11,9 @@ typedef enum {
     SPHERE = 0,
     CYLINDER = 1,
     CUBOID   = 2,
-    OTHER
+    CONE     = 3,
+    PYRA     = 4,
+    OTHERPRIM
 } dopoo_primitiveType;
 
 
@@ -51,6 +53,18 @@ typedef struct
     dopoo_mapD map;
 }dopoo_cone;
 
+typedef struct
+{
+    dopoo_primitiveType type;
+    double h;
+    double w0;
+    double w1;
+    double d0;
+    double d1;
+    dopoo_rgbI rgb;
+    dopoo_mapD map;
+}dopoo_pyra;
+
 dopoo_sphere*
 dopoo_sphere_create(dopoo_vec3D c, double r, dopoo_rgbI rgb);
 
@@ -80,5 +94,8 @@ dopoo_cone_computeNorm(double h, double r0, double r1, dopoo_vec3D p);
 
 dopoo_vec3D
 dopoo_pyra_computeNorm(double h, double w0, double w1, double d0, double d1, dopoo_vec3D p);
+
+void
+dopoo_prim_clear(void* prim);
 
 #endif

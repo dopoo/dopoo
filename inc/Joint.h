@@ -3,12 +3,13 @@
 
 #include "Vec.h" 
 #include "Spectrum.h"
+#include "Primitive.h"
+#include "DataType.h"
 
 typedef struct
 {
-    dopoo_vec3D c;
-    double r;
-    dopoo_rgbI rgb;
+    dopoo_dataType type;
+    dopoo_sphere s;
     void* prev;
     void* next;
 }dopoo_joint2;

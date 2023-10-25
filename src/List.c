@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "../inc/List.h"
+#include "../inc/DataType.h"
 
 dopoo_list*
 dopoo_list_create(int32_t maxSize)
@@ -15,6 +16,8 @@ dopoo_list_create(int32_t maxSize)
 void
 dopoo_list_clear(dopoo_list* list)
 {
+    for(int32_t i = 0; i < list->size; i++)
+        dopoo_dataType_clear(list->data[i]);
     free(list->data);
     free(list);
 }
