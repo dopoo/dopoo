@@ -15,7 +15,7 @@ typedef struct
 }dopoo_joint2;
 
 dopoo_joint2*
-dopoo_joint2_create(dopoo_vec3D c, double r, dopoo_rgbI rgb, void* prev, void* next);
+dopoo_joint2_create(dopoo_vec3D c, double r, dopoo_vec3D rgb, void* prev, void* next);
 
 void
 dopoo_joint2_clear(dopoo_joint2* joint);

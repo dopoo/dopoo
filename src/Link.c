@@ -47,7 +47,7 @@ dopoo_link_getJoint(const dopoo_link* link, int32_t i)
 }
 
 bool
-dopoo_link_intersect(const dopoo_link* link, dopoo_rayD* ray, dopoo_vec3D* n, double* t)
+dopoo_link_intersect(const dopoo_link* link, dopoo_rayD* ray, int32_t* num, dopoo_vec3D* n, double* t)
 {
     *t = DBL_MAX;
     double t0 = DBL_MAX;
@@ -55,35 +55,48 @@ dopoo_link_intersect(const dopoo_link* link, dopoo_rayD* ray, dopoo_vec3D* n, do
     bool intersect = false;
     for(int32_t i = 0; i < link->nodes->size; i++)
     {
-        void* prim = (((dopoo_node2*)(link->nodes->data[i]))->prim);
+        void* prim = ((dopoo_node2*)(link->nodes->data[i]))->prim;
         if(dopoo_prim_intersect(prim, ray, &n0, &t0))
         {
             intersect = true;
-            if(*t < t0)
+            if(*t > t0)
             {
                 *t = t0;
                 *n = n0;
+                *num = i;
             }
         }
     }
 
     for(int32_t i = 0; i < link->joints->size; i++)
     {
-        dopoo_sphere s = (((dopoo_joint2*)(link->joints->data[i]))->s);
+        dopoo_sphere s = ((dopoo_joint2*)(link->joints->data[i]))->s;
         if(dopoo_prim_intersect((void*)(&s), ray, &n0, &t0))
         {
             intersect = true;
-            if(*t < t0)
+            if(*t > t0)
             {
                 *t = t0;
                 *n = n0;
+                *num = link->nodes->size + i;
             }
         }
     }
     
     return intersect;
-
 }
+
+dopoo_vec3D
+dopoo_link_getRgb(const dopoo_link* link, int32_t num)
+{
+    if(num < link->nodes->size)
+        return dopoo_prim_getRgb(((dopoo_node2*)(link->nodes->data[num]))->prim);
+    else if(num < link->nodes->size + link->joints->size)
+        return dopoo_prim_getRgb((void*)(&(((dopoo_joint2*)(link->joints->data[num]))->s)));
+    else
+        return (dopoo_vec3D){0, 0, 0};
+}
+
 
 
 

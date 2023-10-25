@@ -22,7 +22,7 @@ typedef struct
     dopoo_primitiveType type;
     double r;
     dopoo_vec3D c;
-    dopoo_rgbI rgb;
+    dopoo_vec3D rgb;
 }dopoo_sphere;
 
 typedef struct
@@ -30,7 +30,7 @@ typedef struct
     dopoo_primitiveType type;
     double h;
     double r;
-    dopoo_rgbI rgb;
+    dopoo_vec3D rgb;
     dopoo_mapD map;
 }dopoo_cylinder;
 
@@ -39,7 +39,7 @@ typedef struct
     dopoo_primitiveType type;
     dopoo_vec3D min;
     dopoo_vec3D max;
-    dopoo_rgbI rgb;
+    dopoo_vec3D rgb;
     dopoo_mapD map;
 }dopoo_cuboid;
 
@@ -49,7 +49,7 @@ typedef struct
     double h;
     double r0;
     double r1;
-    dopoo_rgbI rgb;
+    dopoo_vec3D rgb;
     dopoo_mapD map;
 }dopoo_cone;
 
@@ -61,18 +61,18 @@ typedef struct
     double w1;
     double d0;
     double d1;
-    dopoo_rgbI rgb;
+    dopoo_vec3D rgb;
     dopoo_mapD map;
 }dopoo_pyra;
 
 dopoo_sphere*
-dopoo_sphere_create(dopoo_vec3D c, double r, dopoo_rgbI rgb);
+dopoo_sphere_create(dopoo_vec3D c, double r, dopoo_vec3D rgb);
 
 dopoo_cylinder*
-dopoo_cylinder_create(double h, double r, dopoo_rgbI rgb);
+dopoo_cylinder_create(double h, double r, dopoo_vec3D rgb);
 
 dopoo_cuboid*
-dopoo_cuboid_create(dopoo_vec3D min, dopoo_vec3D max, dopoo_rgbI rgb);
+dopoo_cuboid_create(dopoo_vec3D min, dopoo_vec3D max, dopoo_vec3D rgb);
 
 void
 dopoo_sphere_clear(dopoo_sphere* sphere);
@@ -100,5 +100,8 @@ dopoo_prim_clear(void* prim);
 
 bool
 dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* t);
+
+dopoo_vec3D
+dopoo_prim_getRgb(void* prim);
 
 #endif

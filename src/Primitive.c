@@ -5,7 +5,7 @@
 #include "../inc/Primitive.h"
 
 dopoo_sphere*
-dopoo_sphere_create(dopoo_vec3D c, double r, dopoo_rgbI rgb)
+dopoo_sphere_create(dopoo_vec3D c, double r, dopoo_vec3D rgb)
 {
     dopoo_sphere* sphere = (dopoo_sphere*)malloc(sizeof(dopoo_sphere));
     sphere->type = SPHERE;
@@ -16,7 +16,7 @@ dopoo_sphere_create(dopoo_vec3D c, double r, dopoo_rgbI rgb)
 }
 
 dopoo_cylinder*
-dopoo_cylinder_create(double h, double r, dopoo_rgbI rgb)
+dopoo_cylinder_create(double h, double r, dopoo_vec3D rgb)
 {
     dopoo_cylinder* cylinder = (dopoo_cylinder*)malloc(sizeof(dopoo_cylinder));
     cylinder->type = CYLINDER;
@@ -28,7 +28,7 @@ dopoo_cylinder_create(double h, double r, dopoo_rgbI rgb)
 }
 
 dopoo_cuboid*
-dopoo_cuboid_create(dopoo_vec3D min, dopoo_vec3D max, dopoo_rgbI rgb)
+dopoo_cuboid_create(dopoo_vec3D min, dopoo_vec3D max, dopoo_vec3D rgb)
 {
     dopoo_cuboid* cuboid = (dopoo_cuboid*)malloc(sizeof(dopoo_cuboid));
     cuboid->type = CUBOID;
@@ -40,7 +40,7 @@ dopoo_cuboid_create(dopoo_vec3D min, dopoo_vec3D max, dopoo_rgbI rgb)
 }
 
 dopoo_cone*
-dopoo_cone_create(double h, double r0, double r1, dopoo_rgbI rgb)
+dopoo_cone_create(double h, double r0, double r1, dopoo_vec3D rgb)
 {
     dopoo_cone* cone = (dopoo_cone*)malloc(sizeof(dopoo_cone));
     cone->type = CONE;
@@ -53,7 +53,7 @@ dopoo_cone_create(double h, double r0, double r1, dopoo_rgbI rgb)
 }
 
 dopoo_pyra*
-dopoo_pyra_create(double h, double w0, double w1, double d0, double d1, dopoo_rgbI rgb)
+dopoo_pyra_create(double h, double w0, double w1, double d0, double d1, dopoo_vec3D rgb)
 {
     dopoo_pyra* pyra = (dopoo_pyra*)malloc(sizeof(dopoo_pyra));
     pyra->type = PYRA;
@@ -403,5 +403,26 @@ dopoo_prim_clear(void* prim)
             return dopoo_pyra_clear((dopoo_pyra*)(prim));
         default:
             break;
+    }
+}
+
+dopoo_vec3D
+dopoo_prim_getRgb(void* prim)
+{
+    dopoo_primitiveType type = *((dopoo_primitiveType*)prim);
+    switch(type)
+    {
+        case SPHERE:
+            return ((dopoo_sphere*)(prim))->rgb;
+        case CYLINDER:
+            return ((dopoo_cylinder*)(prim))->rgb;
+        case CUBOID:
+            return ((dopoo_cuboid*)(prim))->rgb;
+        case CONE:
+            return ((dopoo_cone*)(prim))->rgb;
+        case PYRA:
+            return ((dopoo_pyra*)(prim))->rgb;
+        default:
+            return (dopoo_vec3D){0, 0, 0};
     }
 }
