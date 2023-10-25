@@ -114,3 +114,45 @@ dopoo_render_cone(const dopoo_camera* camera, double h, double r0, double r1, do
         }//loop over image height
     }//loop over image width
 }
+
+void
+dopoo_render_pyra(const dopoo_camera* camera, double h, double w0, double w1, double d0, double d1, dopoo_mapD* map, dopoo_vec3D rgb, dopoo_vec3D lineRgb)
+{
+    dopoo_rayD ray;
+
+    int32_t width = camera->film.width;
+    int32_t height = camera->film.height;
+    dopoo_vec3D prgb;
+    double t0, t1;
+    double lineWidth = 0.01;
+
+    for (int32_t j=0; j < height; ++j) {
+        for (int32_t i=0; i < width; ++i) {
+            if(i == 480 && j == 360)
+                printf("hello world\n");
+
+            double x = 0; 
+            double y = 0;
+            dopoo_camera_getRay(camera, &ray, i, j, x, y);
+            dopoo_rayD_applyInverse(&ray, map);
+            if(dopoo_rayD_intersectPyra(&ray, h, w0, w1, d0, d1, &t0, &t1))
+            {
+                dopoo_vec3D p0 = dopoo_rayD_computeP(&ray, t0);
+                dopoo_vec3D n = dopoo_pyra_computeNorm(h, w0, w1, d0, d1, p0);
+                n = dopoo_vec3D_norm(dopoo_mapD_applyRS(map, n));
+                double z = dopoo_vec3D_getz(n);
+                prgb = dopoo_vec3D_scale(rgb, z);
+            }
+            else if(dopoo_rayD_intersectPyra(&ray, h+2*lineWidth, w0+lineWidth, w1 + lineWidth, d0 + lineWidth, d1 + lineWidth, &t0, &t1))
+            {
+                prgb = lineRgb;
+            }
+            else
+            {
+                prgb = (dopoo_vec3D){0, 0, 0};
+            }
+            
+            (*(camera->film.pixel + j * width + i)) = dopoo_rgbI_fromVec(prgb);
+        }//loop over image height
+    }//loop over image width
+}

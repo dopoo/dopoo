@@ -152,7 +152,7 @@ dopoo_pyra_computeNorm(double h, double w0, double w1, double d0, double d1, dop
     dopoo_vec3D p3 = {w0/2, -h/2, d0/2};
     v0 = (dopoo_vec3D){1, 0, 0};
     v1 = (dopoo_vec3D){(w1 - w0) / 2, -h, (d0 - d1) / 2};  
-    dopoo_vec3D n4 = dopoo_vec3D_norm(dopoo_vec3D_cross(v0, v1));
+    dopoo_vec3D n4 = dopoo_vec3D_norm(dopoo_vec3D_cross(v1, v0));
     dopoo_vec3D p4 = {-w0/2, -h/2, d0/2};
     v1 = (dopoo_vec3D){(w1 - w0) / 2, -h, (d1 - d0) / 2};  
     dopoo_vec3D n5 = dopoo_vec3D_norm(dopoo_vec3D_cross(v0, v1));

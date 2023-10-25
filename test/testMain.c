@@ -13,5 +13,6 @@ main()
     //dopoo_testMap();
     //dopoo_testRenderSphere();
     //dopoo_testRenderCylinder();
-    dopoo_testRenderCone();
+    //dopoo_testRenderCone();
+    dopoo_testRenderPyra();
 }

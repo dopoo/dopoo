@@ -41,4 +41,7 @@ dopoo_rayD_intersectBox(const dopoo_rayD* ray, dopoo_vec3D min, dopoo_vec3D max,
 bool
 dopoo_rayD_intersectCone(const dopoo_rayD* ray, double h, double r0, double r1, double* t0, double* t1);
 
+bool
+dopoo_rayD_intersectPyra(const dopoo_rayD* ray, double h, double w0, double w1, double d0, double d1, double* t0, double* t1);
+
 #endif

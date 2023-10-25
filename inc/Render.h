@@ -12,4 +12,7 @@ dopoo_render_cylinder(const dopoo_camera* camera, double h, double r, dopoo_mapD
 void
 dopoo_render_cone(const dopoo_camera* camera, double h, double r0, double r1, dopoo_mapD* map, dopoo_vec3D rgb, dopoo_vec3D lineRgb);
 
+void
+dopoo_render_pyra(const dopoo_camera* camera, double h, double w0, double w1, double d0, double d1, dopoo_mapD* map, dopoo_vec3D rgb, dopoo_vec3D lineRgb);
+
 #endif

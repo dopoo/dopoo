@@ -412,13 +412,16 @@ dopoo_rayD_intersectPyra(const dopoo_rayD* ray, double h, double w0, double w1, 
     {
         dopoo_vec3D p2 = dopoo_rayD_computeP(ray, t);
         double p2y = dopoo_vec3D_gety(p2);
-        double p2z = dopoo_vec3D_getz(p2);
-        double zm = d0/2 + (d1 - d0) * (p2y + h/2) / (2 * h);
-        if(p2z >= -zm && p2z <= zm)
+        if(p2y >= -h / 2 && p2y <= h / 2)
         {
-            *t0 = min(*t0, t);
-            *t1 = max(*t1, t);
-            intersect = true;
+            double p2z = dopoo_vec3D_getz(p2);
+            double zm = d0/2 + (d1 - d0) * (p2y + h/2) / (2 * h);
+            if(p2z >= -zm && p2z <= zm)
+            {
+                *t0 = min(*t0, t);
+                *t1 = max(*t1, t);
+                intersect = true;
+            }
         }
     }
 
@@ -426,13 +429,16 @@ dopoo_rayD_intersectPyra(const dopoo_rayD* ray, double h, double w0, double w1, 
     {
         dopoo_vec3D p2 = dopoo_rayD_computeP(ray, t);
         double p2y = dopoo_vec3D_gety(p2);
-        double p2z = dopoo_vec3D_getz(p2);
-        double zm = d0/2 + (d1 - d0) * (p2y + h/2) / (2 * h);
-        if(p2z >= -zm && p2z <= zm)
+        if(p2y >= -h / 2 && p2y <= h / 2)
         {
-            *t0 = min(*t0, t);
-            *t1 = max(*t1, t);
-            intersect = true;
+            double p2z = dopoo_vec3D_getz(p2);
+            double zm = d0/2 + (d1 - d0) * (p2y + h/2) / (2 * h);
+            if(p2z >= -zm && p2z <= zm)
+            {
+                *t0 = min(*t0, t);
+                *t1 = max(*t1, t);
+                intersect = true;
+            }
         }
     }
 
@@ -440,13 +446,16 @@ dopoo_rayD_intersectPyra(const dopoo_rayD* ray, double h, double w0, double w1, 
     {
         dopoo_vec3D p2 = dopoo_rayD_computeP(ray, t);
         double p2y = dopoo_vec3D_gety(p2);
-        double p2x = dopoo_vec3D_getx(p2);
-        double xm = w0/2 + (w1 - w0) * (p2y + h/2) / (2 * h);
-        if(p2x >= -xm && p2x <= xm)
+        if(p2y >= -h / 2 && p2y <= h / 2)
         {
-            *t0 = min(*t0, t);
-            *t1 = max(*t1, t);
-            intersect = true;
+            double p2x = dopoo_vec3D_getx(p2);
+            double xm = w0/2 + (w1 - w0) * (p2y + h/2) / (2 * h);
+            if(p2x >= -xm && p2x <= xm)
+            {
+                *t0 = min(*t0, t);
+                *t1 = max(*t1, t);
+                intersect = true;
+            }
         }
     }
 
@@ -454,13 +463,16 @@ dopoo_rayD_intersectPyra(const dopoo_rayD* ray, double h, double w0, double w1, 
     {
         dopoo_vec3D p2 = dopoo_rayD_computeP(ray, t);
         double p2y = dopoo_vec3D_gety(p2);
-        double p2x = dopoo_vec3D_getx(p2);
-        double xm = w0/2 + (w1 - w0) * (p2y + h/2) / (2 * h);
-        if(p2x >= -xm && p2x <= xm)
+        if(p2y >= -h / 2 && p2y <= h / 2)
         {
-            *t0 = min(*t0, t);
-            *t1 = max(*t1, t);
-            intersect = true;
+            double p2x = dopoo_vec3D_getx(p2);
+            double xm = w0/2 + (w1 - w0) * (p2y + h/2) / (2 * h);
+            if(p2x >= -xm && p2x <= xm)
+            {
+                *t0 = min(*t0, t);
+                *t1 = max(*t1, t);
+                intersect = true;
+            }
         }
     }
 

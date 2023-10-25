@@ -78,4 +78,7 @@ dopoo_cone_computeIntersect(double h, double r0, double r1, dopoo_vec3D pmin, do
 dopoo_vec3D
 dopoo_cone_computeNorm(double h, double r0, double r1, dopoo_vec3D p);
 
+dopoo_vec3D
+dopoo_pyra_computeNorm(double h, double w0, double w1, double d0, double d1, dopoo_vec3D p);
+
 #endif
