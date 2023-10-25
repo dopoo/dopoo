@@ -100,7 +100,7 @@ dopoo_testRenderPyra()
     dopoo_vec3D t = {0, 0, 2};
     dopoo_camera* camera = dopoo_camera_create(HRESOLUTION, VRESOLUTION, q, t, ORTHOGRAPHICCAMERA);
 
-    // create cone
+    // create pyra
     double h = 1;
     double w0 = 0.1;
     double w1 = 0.5;

@@ -128,9 +128,6 @@ dopoo_render_pyra(const dopoo_camera* camera, double h, double w0, double w1, do
 
     for (int32_t j=0; j < height; ++j) {
         for (int32_t i=0; i < width; ++i) {
-            if(i == 480 && j == 360)
-                printf("hello world\n");
-
             double x = 0; 
             double y = 0;
             dopoo_camera_getRay(camera, &ray, i, j, x, y);
