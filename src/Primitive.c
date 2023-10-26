@@ -263,19 +263,20 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
     double t0 = 0;
     double t1 = DBL_MAX;
     double lineWidth = 0.01;
+    dopoo_rayD lRay = *ray;
     switch(type)
     {
         case SPHERE:
         {
             dopoo_sphere* sphere = (dopoo_sphere*)(prim);
-            if(dopoo_rayD_intersectSphere(ray, sphere->c, sphere->r, &t0, &t1))
+            if(dopoo_rayD_intersectSphere(&lRay, sphere->c, sphere->r, &t0, &t1))
             {
-                dopoo_vec3D p0 = dopoo_rayD_computeP(ray, t0);
+                dopoo_vec3D p0 = dopoo_rayD_computeP(&lRay, t0);
                 *n = dopoo_vec3D_norm(dopoo_vec3D_minus(p0, sphere->c));
                 *t = t0;
                 return true;
             }
-            else if (dopoo_rayD_intersectSphere(ray, sphere->c, sphere->r + lineWidth, &t0, &t1))
+            else if (dopoo_rayD_intersectSphere(&lRay, sphere->c, sphere->r + lineWidth, &t0, &t1))
             {
                 *t = DBL_MAX;
                 return true;
@@ -288,16 +289,16 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
         case CYLINDER:
         {
             dopoo_cylinder* cylinder = (dopoo_cylinder*)(prim);
-            dopoo_rayD_applyInverse(ray, &(cylinder->map));
-            if(dopoo_rayD_intersectCylinder(ray, cylinder->h, cylinder->r, &t0, &t1))
+            dopoo_rayD_applyInverse(&lRay, &(cylinder->map));
+            if(dopoo_rayD_intersectCylinder(&lRay, cylinder->h, cylinder->r, &t0, &t1))
             {
-                dopoo_vec3D p0 = dopoo_rayD_computeP(ray, t0);
+                dopoo_vec3D p0 = dopoo_rayD_computeP(&lRay, t0);
                 *n = dopoo_cylinder_computeNorm(cylinder->h, cylinder->r, p0);
                 *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(cylinder->map), *n));
                 *t = t0;
                 return true;
             }
-            else if (dopoo_rayD_intersectCylinder(ray, cylinder->h + 2 * lineWidth, cylinder->r + lineWidth, &t0, &t1))
+            else if (dopoo_rayD_intersectCylinder(&lRay, cylinder->h + 2 * lineWidth, cylinder->r + lineWidth, &t0, &t1))
             {
                 *t = DBL_MAX;
                 return true;
@@ -311,18 +312,18 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
         case CUBOID:
         {
             dopoo_cuboid* cuboid = (dopoo_cuboid*)(prim);
-            dopoo_rayD_applyInverse(ray, &(cuboid->map));
+            dopoo_rayD_applyInverse(&lRay, &(cuboid->map));
             dopoo_vec3D minl = dopoo_vec3D_minus(cuboid->min, (dopoo_vec3D){lineWidth, lineWidth, lineWidth});
             dopoo_vec3D maxl = dopoo_vec3D_add(cuboid->max, (dopoo_vec3D){lineWidth, lineWidth, lineWidth});
-            if(dopoo_rayD_intersectBox(ray, cuboid->min, cuboid->max, &t0, &t1))
+            if(dopoo_rayD_intersectBox(&lRay, cuboid->min, cuboid->max, &t0, &t1))
             {
-                dopoo_vec3D p0 = dopoo_rayD_computeP(ray, t0);
+                dopoo_vec3D p0 = dopoo_rayD_computeP(&lRay, t0);
                 *n = dopoo_cuboid_computeNorm(cuboid->min, cuboid->max, p0);
                 *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(cuboid->map), *n));
                 *t = t0;
                 return true;
             }
-            else if (dopoo_rayD_intersectBox(ray, minl, maxl, &t0, &t1))
+            else if (dopoo_rayD_intersectBox(&lRay, minl, maxl, &t0, &t1))
             {
                 *t = DBL_MAX;
                 return true;
@@ -336,16 +337,16 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
         case CONE:
         {
             dopoo_cone* cone = (dopoo_cone*)(prim);
-            dopoo_rayD_applyInverse(ray, &(cone->map));
-            if(dopoo_rayD_intersectCone(ray, cone->h, cone->r0, cone->r1, &t0, &t1))
+            dopoo_rayD_applyInverse(&lRay, &(cone->map));
+            if(dopoo_rayD_intersectCone(&lRay, cone->h, cone->r0, cone->r1, &t0, &t1))
             {
-                dopoo_vec3D p0 = dopoo_rayD_computeP(ray, t0);
+                dopoo_vec3D p0 = dopoo_rayD_computeP(&lRay, t0);
                 *n = dopoo_cone_computeNorm(cone->h, cone->r0, cone->r1, p0);
                 *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(cone->map), *n));
                 *t = t0;
                 return true;
             }
-            else if (dopoo_rayD_intersectCone(ray, cone->h + 2 * lineWidth, cone->r0 + lineWidth, cone->r1 + lineWidth, &t0, &t1))
+            else if (dopoo_rayD_intersectCone(&lRay, cone->h + 2 * lineWidth, cone->r0 + lineWidth, cone->r1 + lineWidth, &t0, &t1))
             {
                 *t = DBL_MAX;
                 return true;
@@ -359,16 +360,16 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
         case PYRA:
         {
             dopoo_pyra* pyra = (dopoo_pyra*)(prim);
-            dopoo_rayD_applyInverse(ray, &(pyra->map));
-            if(dopoo_rayD_intersectPyra(ray, pyra->h, pyra->w0, pyra->w1, pyra->d0, pyra->d1, &t0, &t1))
+            dopoo_rayD_applyInverse(&lRay, &(pyra->map));
+            if(dopoo_rayD_intersectPyra(&lRay, pyra->h, pyra->w0, pyra->w1, pyra->d0, pyra->d1, &t0, &t1))
             {
-                dopoo_vec3D p0 = dopoo_rayD_computeP(ray, t0);
+                dopoo_vec3D p0 = dopoo_rayD_computeP(&lRay, t0);
                 *n = dopoo_pyra_computeNorm(pyra->h, pyra->w0, pyra->w1, pyra->d0, pyra->d1, p0);
                 *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(pyra->map), *n));
                 *t = t0;
                 return true;
             }
-            else if (dopoo_rayD_intersectPyra(ray, pyra->h + 2 * lineWidth, pyra->w0  + 2 * lineWidth, pyra->w1 + 2 * lineWidth, 
+            else if (dopoo_rayD_intersectPyra(&lRay, pyra->h + 2 * lineWidth, pyra->w0  + 2 * lineWidth, pyra->w1 + 2 * lineWidth, 
                                               pyra->d0 + 2 * lineWidth, pyra->d1 + 2 * lineWidth, &t0, &t1))
             {
                 *t = DBL_MAX;

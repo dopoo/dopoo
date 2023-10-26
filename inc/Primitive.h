@@ -74,6 +74,12 @@ dopoo_cylinder_create(double h, double r, dopoo_vec3D rgb);
 dopoo_cuboid*
 dopoo_cuboid_create(dopoo_vec3D min, dopoo_vec3D max, dopoo_vec3D rgb);
 
+dopoo_cone*
+dopoo_cone_create(double h, double r0, double r1, dopoo_vec3D rgb);
+
+dopoo_pyra*
+dopoo_pyra_create(double h, double w0, double w1, double d0, double d1, dopoo_vec3D rgb);
+
 void
 dopoo_sphere_clear(dopoo_sphere* sphere);
 
