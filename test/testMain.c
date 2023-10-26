@@ -11,8 +11,5 @@ main()
     //dopoo_testQuatAndMat();
     //dopoo_testMat();
     //dopoo_testMap();
-    //dopoo_testRenderSphere();
-    //dopoo_testRenderCylinder();
-    //dopoo_testRenderCone();
-    dopoo_testRenderPyra();
+    dopoo_testRenderLink();
 }

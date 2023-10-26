@@ -2,6 +2,8 @@
 #define __DOPOOTESTRENDER__
 
 #include "../inc/Render.h"
+#include "../inc/Primitive.h"
+#include "../inc/Node.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "../thirdPartyLibrary/stb_image_write.h"
@@ -9,8 +11,9 @@
 #define HRESOLUTION 960
 #define VRESOLUTION 720
 
+
 static inline void 
-dopoo_testRenderSphere()
+dopoo_testRenderLink()
 {
     // create camera
     dopoo_quatD q = dopoo_quatD_create(0, 0, 0, 1);
@@ -21,106 +24,53 @@ dopoo_testRenderSphere()
     dopoo_vec3D c = {0, 0, 0};
     double r = 0.5;
     dopoo_vec3D rgb = {1, 1, 1};
-
-    //render
-    dopoo_render_sphere(camera, c, r, rgb);
-
-    //save render result to image
-    dopoo_rgbI* pixel = dopoo_camera_getPixel(camera);
-    int32_t width = dopoo_camera_getWidth(camera);
-    int32_t height = dopoo_camera_getHeight(camera);
-    const char* path = "data/renderResult/sphere.jpg";
-    stbi_write_jpg(path, width, height, 4, pixel, 90);
-}
-
-static inline void 
-dopoo_testRenderCylinder()
-{
-    // create camera
-    dopoo_quatD q = dopoo_quatD_create(0, 0, 0, 1);
-    dopoo_vec3D t = {0, 0, 2};
-    dopoo_camera* camera = dopoo_camera_create(HRESOLUTION, VRESOLUTION, q, t, ORTHOGRAPHICCAMERA);
-
+    dopoo_sphere* sphere = dopoo_sphere_create(c, r, rgb);
+    
     // create cylinder
     double h = 1;
-    double r = 0.5;
-    dopoo_mapD map;
-    dopoo_mapD_init(&map);
-    map.r = dopoo_quatD_create(1,1,1,2);
-    map.t = (dopoo_vec3D){0, 0, 0};
-    dopoo_vec3D rgb = {1, 0, 1};
-    dopoo_vec3D lineRgb = {0, 1, 0};
-
-    //render
-    dopoo_render_cylinder(camera, h, r, &map, rgb, lineRgb);
-
-    //save render result to image
-    dopoo_rgbI* pixel = dopoo_camera_getPixel(camera);
-    int32_t width = dopoo_camera_getWidth(camera);
-    int32_t height = dopoo_camera_getHeight(camera);
-    const char* path = "data/renderResult/cylinder.jpg";
-    stbi_write_jpg(path, width, height, 4, pixel, 90);
-}
-
-static inline void 
-dopoo_testRenderCone()
-{
-    // create camera
-    dopoo_quatD q = dopoo_quatD_create(0, 0, 0, 1);
-    dopoo_vec3D t = {0, 0, 2};
-    dopoo_camera* camera = dopoo_camera_create(HRESOLUTION, VRESOLUTION, q, t, ORTHOGRAPHICCAMERA);
-
-    // create cone
-    double h = 1;
-    double r0 = 0.1;
-    double r1 = 0.5;
-    dopoo_mapD map;
-    dopoo_mapD_init(&map);
-    map.r = dopoo_quatD_create(1, 0, 1, 0.25);
-    //map.t = (dopoo_vec3D){0, 0, 0};
-    dopoo_vec3D rgb = {1, 0, 1};
-    dopoo_vec3D lineRgb = {0, 1, 0};
-
-    //render
-    dopoo_render_cone(camera, h, r0, r1, &map, rgb, lineRgb);
-
-    //save render result to image
-    dopoo_rgbI* pixel = dopoo_camera_getPixel(camera);
-    int32_t width = dopoo_camera_getWidth(camera);
-    int32_t height = dopoo_camera_getHeight(camera);
-    const char* path = "data/renderResult/cone.jpg";
-    stbi_write_jpg(path, width, height, 4, pixel, 90);
-}
-
-static inline void 
-dopoo_testRenderPyra()
-{
-    // create camera
-    dopoo_quatD q = dopoo_quatD_create(0, 0, 0, 1);
-    dopoo_vec3D t = {0, 0, 2};
-    dopoo_camera* camera = dopoo_camera_create(HRESOLUTION, VRESOLUTION, q, t, ORTHOGRAPHICCAMERA);
+    r = 0.5;
+    rgb = (dopoo_vec3D){1, 0, 1};
+    dopoo_cylinder* cylinder = dopoo_cylinder_create(h, r, rgb);
 
     // create pyra
-    double h = 1;
+    h = 1;
     double w0 = 0.1;
     double w1 = 0.5;
     double d0 = 0.1;
     double d1 = 0.5;
-    dopoo_mapD map;
-    dopoo_mapD_init(&map);
-    map.r = dopoo_quatD_create(1, 0, 1, 0.25);
-    //map.t = (dopoo_vec3D){0, 0, 0};
-    dopoo_vec3D rgb = {1, 0, 1};
-    dopoo_vec3D lineRgb = {0, 1, 0};
+    rgb = (dopoo_vec3D){0, 0, 1};
+    dopoo_pyra* pyra = dopoo_pyra_create(h, w0, w1, d0, d1, rgb);
+
+    // create cone
+    h = 1;
+    double r0 = 0.1;
+    double r1 = 0.5;
+    rgb = (dopoo_vec3D){1, 0, 1};
+    dopoo_cone* cone = dopoo_cone_create(h, r0, r1, rgb);
+
+    // create nodes
+    dopoo_node2* node0 = dopoo_node2_create(pyra, NULL, NULL);
+    dopoo_node2* node1 = dopoo_node2_create(cone, NULL, NULL);
+
+    // create link
+    dopoo_link* link = dopoo_link_create(1, 0);
+    dopoo_link_addNode(link, node0);
+    dopoo_link_addNode(link, node1);
+
+    // transform
+    pyra->map.r = dopoo_quatD_create(1, 0, 1, 0.25);
+    cone->map.r = dopoo_quatD_create(-1, 0, -1, 0.25);
+    pyra->map.t = (dopoo_vec3D){-0.3, 0, 0};
 
     //render
-    dopoo_render_pyra(camera, h, w0, w1, d0, d1, &map, rgb, lineRgb);
+    dopoo_vec3D lineRgb = {0, 1, 0};
+    dopoo_render_link(camera, link, lineRgb);
 
     //save render result to image
     dopoo_rgbI* pixel = dopoo_camera_getPixel(camera);
     int32_t width = dopoo_camera_getWidth(camera);
     int32_t height = dopoo_camera_getHeight(camera);
-    const char* path = "data/renderResult/pyra.jpg";
+    const char* path = "data/renderResult/link.jpg";
     stbi_write_jpg(path, width, height, 4, pixel, 90);
 }
 
