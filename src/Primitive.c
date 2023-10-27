@@ -278,7 +278,7 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
             }
             else if (dopoo_rayD_intersectSphere(&lRay, sphere->c, sphere->r + lineWidth, &t0, &t1))
             {
-                *t = DBL_MAX;
+                *t = LINETIME;
                 return true;
             }
             else
@@ -300,7 +300,7 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
             }
             else if (dopoo_rayD_intersectCylinder(&lRay, cylinder->h + 2 * lineWidth, cylinder->r + lineWidth, &t0, &t1))
             {
-                *t = DBL_MAX;
+                *t = LINETIME;
                 return true;
             }
             else
@@ -325,7 +325,7 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
             }
             else if (dopoo_rayD_intersectBox(&lRay, minl, maxl, &t0, &t1))
             {
-                *t = DBL_MAX;
+                *t = LINETIME;
                 return true;
             }
             else
@@ -348,7 +348,7 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
             }
             else if (dopoo_rayD_intersectCone(&lRay, cone->h + 2 * lineWidth, cone->r0 + lineWidth, cone->r1 + lineWidth, &t0, &t1))
             {
-                *t = DBL_MAX;
+                *t = LINETIME;
                 return true;
             }
             else
@@ -372,7 +372,7 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
             else if (dopoo_rayD_intersectPyra(&lRay, pyra->h + 2 * lineWidth, pyra->w0  + 2 * lineWidth, pyra->w1 + 2 * lineWidth, 
                                               pyra->d0 + 2 * lineWidth, pyra->d1 + 2 * lineWidth, &t0, &t1))
             {
-                *t = DBL_MAX;
+                *t = LINETIME;
                 return true;
             }
             else

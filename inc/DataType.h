@@ -4,6 +4,7 @@
 typedef enum {
     NODE2 = 0,
     JOINT2 = 1,
+    LINK   = 2,
     OTHER
 } dopoo_dataType;
 

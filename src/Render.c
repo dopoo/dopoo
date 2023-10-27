@@ -5,9 +5,8 @@
 #include "../inc/Math.h"
 #include "../inc/Primitive.h"
 
-
 void
-dopoo_render_link(const dopoo_camera* camera, const dopoo_link* link, dopoo_vec3D lineRgb)
+dopoo_render_scene(const dopoo_camera* camera, const dopoo_scene* scene)
 {
     dopoo_rayD ray;
 
@@ -15,7 +14,8 @@ dopoo_render_link(const dopoo_camera* camera, const dopoo_link* link, dopoo_vec3
     int32_t height = camera->film.height;
     dopoo_vec3D prgb;
     double t0;
-    int32_t num;
+    int32_t linkIndex;
+    int32_t nodeIndex;
 
     for (int32_t j=0; j < height; ++j) {
         for (int32_t i=0; i < width; ++i) {
@@ -24,16 +24,17 @@ dopoo_render_link(const dopoo_camera* camera, const dopoo_link* link, dopoo_vec3
             dopoo_camera_getRay(camera, &ray, i, j, x, y);
             dopoo_vec3D n;
             double t;
-            if(dopoo_link_intersect(link, &ray, &num, &n, &t))
+            if(dopoo_scene_intersect(scene, &ray, &linkIndex, &nodeIndex, &n, &t))
             {
-                if(t < DBL_MAX)
+                dopoo_link* link = dopoo_scene_getLink(scene, linkIndex);
+                if(t < LINETIME)
                 {
                     double z = dopoo_vec3D_getz(n);
-                    dopoo_vec3D rgb = dopoo_link_getRgb(link, num);
+                    dopoo_vec3D rgb = dopoo_link_getRgb(link, nodeIndex);
                     prgb = dopoo_vec3D_scale(rgb, z);
                 }
                 else
-                    prgb = lineRgb;
+                    prgb = dopoo_link_getLineRgb(link);
             }
             else
             {

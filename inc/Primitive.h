@@ -6,6 +6,7 @@
 #include "Spectrum.h"
 #include "Ray.h"
 
+#define LINETIME  (DBL_MAX / 2)
 
 typedef enum {
     SPHERE = 0,

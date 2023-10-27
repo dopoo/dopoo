@@ -6,11 +6,13 @@
 #include "../inc/Joint.h"
 
 dopoo_link*
-dopoo_link_create(int32_t nodeSize, int32_t jointSize)
+dopoo_link_create(int32_t nodeSize, int32_t jointSize, dopoo_vec3D lineRgb)
 {
     dopoo_link* link = (dopoo_link*)malloc(sizeof(dopoo_link));
     link->nodes = dopoo_list_create(nodeSize);
     link->joints = dopoo_list_create(jointSize);
+    link->lineRgb = lineRgb;
+    dopoo_mapD_init(&(link->map));
     return link; 
 }
 
@@ -23,27 +25,27 @@ dopoo_link_clear(dopoo_link* link)
 }
 
 void
-dopoo_link_addNode(dopoo_link* link, void* node)
+dopoo_link_addNode(dopoo_link* link, dopoo_node2* node)
 {
     dopoo_list_add(link->nodes, node);
 }
 
 void
-dopoo_link_addJoint(dopoo_link* link, void* joint)
+dopoo_link_addJoint(dopoo_link* link, dopoo_joint2* joint)
 {
     dopoo_list_add(link->joints, joint);
 }
 
-void*
+dopoo_node2*
 dopoo_link_getNode(const dopoo_link* link, int32_t i)
 {
-    return dopoo_list_get(link->nodes, i);
+    return (dopoo_node2*)(dopoo_list_get(link->nodes, i));
 }
 
-void*
+dopoo_joint2*
 dopoo_link_getJoint(const dopoo_link* link, int32_t i)
 {
-    return dopoo_list_get(link->joints, i);
+    return (dopoo_joint2*)(dopoo_list_get(link->joints, i));
 }
 
 bool
@@ -95,6 +97,12 @@ dopoo_link_getRgb(const dopoo_link* link, int32_t num)
         return dopoo_prim_getRgb((void*)(&(((dopoo_joint2*)(link->joints->data[num]))->s)));
     else
         return (dopoo_vec3D){0, 0, 0};
+}
+
+dopoo_vec3D
+dopoo_link_getLineRgb(const dopoo_link* link)
+{
+    return link->lineRgb;
 }
 
 
