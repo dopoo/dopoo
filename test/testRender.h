@@ -53,9 +53,14 @@ dopoo_testRenderLink()
     dopoo_node2* node1 = dopoo_node2_create(cone, NULL, NULL);
 
     // create link
-    dopoo_link* link = dopoo_link_create(1, 0);
+    dopoo_vec3D lineRgb = {0, 1, 0};
+    dopoo_link* link = dopoo_link_create(1, 0, lineRgb);
     dopoo_link_addNode(link, node0);
     dopoo_link_addNode(link, node1);
+
+    //create scene
+    dopoo_scene* scene = dopoo_scene_create(1);
+    dopoo_scene_addLink(scene, link);
 
     // transform
     pyra->map.r = dopoo_quatD_create(1, 0, 1, 0.25);
@@ -63,14 +68,13 @@ dopoo_testRenderLink()
     pyra->map.t = (dopoo_vec3D){-0.3, 0, 0};
 
     //render
-    dopoo_vec3D lineRgb = {0, 1, 0};
-    dopoo_render_link(camera, link, lineRgb);
+    dopoo_render_scene(camera, scene);
 
     //save render result to image
     dopoo_rgbI* pixel = dopoo_camera_getPixel(camera);
     int32_t width = dopoo_camera_getWidth(camera);
     int32_t height = dopoo_camera_getHeight(camera);
-    const char* path = "data/renderResult/link.jpg";
+    const char* path = "data/renderResult/scene.jpg";
     stbi_write_jpg(path, width, height, 4, pixel, 90);
 }
 
