@@ -89,9 +89,28 @@ dopoo_orthographicCamera_getRay(const dopoo_camera* camera, dopoo_rayD* ray, int
 }
 
 void
+dopoo_perspectiveCamera_getRay(const dopoo_camera* camera, dopoo_rayD* ray, int32_t i, int32_t j, double iOffset, double jOffset) 
+{
+    *ray = camera->ray;
+    ray->d = dopoo_camera_rasterToScreen(camera, (double)(i) + iOffset, (double)(j) + jOffset, -1.0);
+    ray->d = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(camera->map), ray->d));
+}
+
+void
 dopoo_camera_getRay(const dopoo_camera* camera, dopoo_rayD* ray, int32_t i, int32_t j, double iOffset, double jOffset)
 {
-    return dopoo_orthographicCamera_getRay(camera, ray, i, j, iOffset, jOffset);
+    dopoo_cameraType type = camera->type;
+    switch (type)
+    {
+        case PERSPECTIVECAMERA:
+            return dopoo_perspectiveCamera_getRay(camera, ray, i, j, iOffset, jOffset);
+            break;
+        case ORTHOGRAPHICCAMERA:
+            return dopoo_orthographicCamera_getRay(camera, ray, i, j, iOffset, jOffset);
+            break;
+        default:
+            break;
+    }
 }
 
 int32_t
