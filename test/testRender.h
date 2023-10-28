@@ -18,7 +18,7 @@ dopoo_testRenderLink()
     // create camera
     dopoo_quatD q = dopoo_quatD_create(0, 0, 0, 1);
     dopoo_vec3D t = {0, 0, 2};
-    dopoo_camera* camera = dopoo_camera_create(HRESOLUTION, VRESOLUTION, q, t, ORTHOGRAPHICCAMERA);
+    dopoo_camera* camera = dopoo_camera_create(HRESOLUTION, VRESOLUTION, q, t, PERSPECTIVECAMERA);
 
     // create sphere
     dopoo_vec3D c = {0, 0, 0};
