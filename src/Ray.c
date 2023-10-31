@@ -43,7 +43,7 @@ dopoo_rayD_computeP(const dopoo_rayD* ray, double t)
 }
 
 void
-dopoo_rayD_applyInverse(dopoo_rayD* ray, dopoo_mapD* map)
+dopoo_rayD_applyInverse(dopoo_rayD* ray, const dopoo_mapD* map)
 {
     ray->p = dopoo_mapD_applyInvRST(map, ray->p);
     ray->d = dopoo_mapD_applyInvR(map, ray->d);
@@ -51,14 +51,15 @@ dopoo_rayD_applyInverse(dopoo_rayD* ray, dopoo_mapD* map)
 }
 
 bool 
-dopoo_rayD_intersectSphere(const dopoo_rayD* ray, dopoo_vec3D c, double r, double* t0, double* t1)
+dopoo_rayD_intersectSphere(const dopoo_rayD* ray, double r, double* t0, double* t1)
 {
     assert(fabs(dopoo_vec3D_lengthSqr(ray->d) - 1) < deltaD);
+    dopoo_vec3D c = {0, 0, 0};
     dopoo_vec3D pc = dopoo_vec3D_minus(c, ray->p);
     double pp3 = dopoo_vec3D_dot(pc, ray->d);
     if(pp3 <0)
         return false;
-    double distSqr = sqrt(dopoo_vec3D_lengthSqr(pc) - pp3 * pp3);
+    double distSqr = dopoo_vec3D_lengthSqr(pc) - pp3 * pp3;
     double rSqr = r * r;
     if(distSqr > rSqr)
         return false;

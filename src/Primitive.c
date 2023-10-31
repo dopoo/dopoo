@@ -5,13 +5,13 @@
 #include "../inc/Primitive.h"
 
 dopoo_sphere*
-dopoo_sphere_create(dopoo_vec3D c, double r, dopoo_vec3D rgb)
+dopoo_sphere_create(double r, dopoo_vec3D rgb)
 {
     dopoo_sphere* sphere = (dopoo_sphere*)malloc(sizeof(dopoo_sphere));
     sphere->type = SPHERE;
-    sphere->c = c;
     sphere->r = r;
     sphere->rgb = rgb;
+    dopoo_mapD_init(&(sphere->map));
     return sphere;
 }
 
@@ -28,12 +28,12 @@ dopoo_cylinder_create(double h, double r, dopoo_vec3D rgb)
 }
 
 dopoo_cuboid*
-dopoo_cuboid_create(dopoo_vec3D min, dopoo_vec3D max, dopoo_vec3D rgb)
+dopoo_cuboid_create(double w, double h, double d, dopoo_vec3D rgb)
 {
     dopoo_cuboid* cuboid = (dopoo_cuboid*)malloc(sizeof(dopoo_cuboid));
     cuboid->type = CUBOID;
-    cuboid->min = min;
-    cuboid->max = max;
+    cuboid->min = (dopoo_vec3D){-w/2, -h/2, -d/2};
+    cuboid->max = (dopoo_vec3D){w/2, h/2, d/2};;
     cuboid->rgb = rgb;
     dopoo_mapD_init(&(cuboid->map));
     return cuboid;
@@ -269,14 +269,16 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
         case SPHERE:
         {
             dopoo_sphere* sphere = (dopoo_sphere*)(prim);
-            if(dopoo_rayD_intersectSphere(&lRay, sphere->c, sphere->r, &t0, &t1))
+            dopoo_rayD_applyInverse(&lRay, &(sphere->map));
+            if(dopoo_rayD_intersectSphere(&lRay, sphere->r, &t0, &t1))
             {
                 dopoo_vec3D p0 = dopoo_rayD_computeP(&lRay, t0);
-                *n = dopoo_vec3D_norm(dopoo_vec3D_minus(p0, sphere->c));
+                *n = p0;
+                *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(sphere->map), *n));
                 *t = t0;
                 return true;
             }
-            else if (dopoo_rayD_intersectSphere(&lRay, sphere->c, sphere->r + lineWidth, &t0, &t1))
+            else if (dopoo_rayD_intersectSphere(&lRay, sphere->r + lineWidth, &t0, &t1))
             {
                 *t = LINETIME;
                 return true;

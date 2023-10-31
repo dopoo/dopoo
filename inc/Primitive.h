@@ -22,8 +22,8 @@ typedef struct
 {
     dopoo_primitiveType type;
     double r;
-    dopoo_vec3D c;
     dopoo_vec3D rgb;
+    dopoo_mapD map;
 }dopoo_sphere;
 
 typedef struct
@@ -67,13 +67,13 @@ typedef struct
 }dopoo_pyra;
 
 dopoo_sphere*
-dopoo_sphere_create(dopoo_vec3D c, double r, dopoo_vec3D rgb);
+dopoo_sphere_create(double r, dopoo_vec3D rgb);
 
 dopoo_cylinder*
 dopoo_cylinder_create(double h, double r, dopoo_vec3D rgb);
 
 dopoo_cuboid*
-dopoo_cuboid_create(dopoo_vec3D min, dopoo_vec3D max, dopoo_vec3D rgb);
+dopoo_cuboid_create(double w, double h, double d, dopoo_vec3D rgb);
 
 dopoo_cone*
 dopoo_cone_create(double h, double r0, double r1, dopoo_vec3D rgb);

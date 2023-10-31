@@ -82,16 +82,18 @@ dopoo_link_intersect(const dopoo_link* link, dopoo_rayD* ray, int32_t* num, dopo
     dopoo_vec3D n0 = {0, 0, 0};
     bool intersect = false;
     int32_t nodeCount = 0;
+    dopoo_rayD lRay = *ray;
+    dopoo_rayD_applyInverse(&lRay, &(link->map));
     for(int32_t i = 0; i < link->nodes->size; i++)
     {
         void* prim = ((dopoo_node2*)(link->nodes->data[i]))->prim;
-        if(dopoo_prim_intersect(prim, ray, &n0, &t0))
+        if(dopoo_prim_intersect(prim, &lRay, &n0, &t0))
         {
             intersect = true;
             if(*t > t0)
             {
                 *t = t0;
-                *n = n0;
+                *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(link->map), n0));
                 *num = i;
             }
         }
@@ -99,14 +101,14 @@ dopoo_link_intersect(const dopoo_link* link, dopoo_rayD* ray, int32_t* num, dopo
 
     for(int32_t i = 0; i < link->joints->size; i++)
     {
-        dopoo_sphere s = ((dopoo_joint2*)(link->joints->data[i]))->s;
-        if(dopoo_prim_intersect((void*)(&s), ray, &n0, &t0))
+        dopoo_sphere* s = ((dopoo_joint2*)(link->joints->data[i]))->s;
+        if(dopoo_prim_intersect(s, &lRay, &n0, &t0))
         {
             intersect = true;
             if(*t > t0)
             {
                 *t = t0;
-                *n = n0;
+                *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(link->map), n0));
                 *num = link->nodes->size + i;
             }
         }
@@ -116,13 +118,13 @@ dopoo_link_intersect(const dopoo_link* link, dopoo_rayD* ray, int32_t* num, dopo
     for(int32_t i = 0; i < link->links->size; i++)
     {
         dopoo_link* l = (dopoo_link*)(link->links->data[i]);
-        if(dopoo_link_intersect(l, ray, num, &n0, &t0))
+        if(dopoo_link_intersect(l, &lRay, num, &n0, &t0))
         {
             intersect = true;
             if(*t > t0)
             {
                 *t = t0;
-                *n = n0;
+                *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(link->map), n0));
                 *num += nodeCount;
             }
         }
@@ -138,7 +140,7 @@ dopoo_link_getRgb(const dopoo_link* link, int32_t num)
     if(num < link->nodes->size)
         return dopoo_prim_getRgb(((dopoo_node2*)(link->nodes->data[num]))->prim);
     else if(num < link->nodes->size + link->joints->size)
-        return dopoo_prim_getRgb((void*)(&(((dopoo_joint2*)(link->joints->data[num]))->s)));
+        return dopoo_prim_getRgb(((dopoo_joint2*)(link->joints->data[num - link->nodes->size]))->s);
     else
     {
         num -= link->nodes->size + link->joints->size;
