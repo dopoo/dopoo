@@ -18,16 +18,22 @@ dopoo_testRenderLink()
     // create camera
     dopoo_quatD q = dopoo_quatD_create(0, 0, 0, 1);
     dopoo_vec3D t = {0, 0, 2};
-    dopoo_camera* camera = dopoo_camera_create(HRESOLUTION, VRESOLUTION, q, t, PERSPECTIVECAMERA);
+    dopoo_camera* camera = dopoo_camera_create(HRESOLUTION, VRESOLUTION, q, t, ORTHOGRAPHICCAMERA);
 
     // create sphere
-    dopoo_vec3D c = {0, 0, 1};
-    double r = 0.5;
+    double r = 0.3;
     dopoo_vec3D rgb = {1, 0, 1};
-    dopoo_sphere* sphere = dopoo_sphere_create(c, r, rgb);
+    dopoo_sphere* sphere = dopoo_sphere_create(r, rgb);
+
+    //cuboid
+    double w = 0.3;
+    double h = 0.3;
+    double d = 0.15;
+    rgb = (dopoo_vec3D){0, 0, 1};
+    dopoo_cuboid* cuboid = dopoo_cuboid_create(w, h, d, rgb);
     
     // create cylinder
-    double h = 1;
+    h = 1;
     r = 0.5;
     rgb = (dopoo_vec3D){1, 0, 1};
     dopoo_cylinder* cylinder = dopoo_cylinder_create(h, r, rgb);
@@ -53,14 +59,16 @@ dopoo_testRenderLink()
     dopoo_node2* node1 = dopoo_node2_create(cone, NULL, NULL);
     dopoo_node2* node2 = dopoo_node2_create(sphere, NULL, NULL);
     dopoo_node2* node3 = dopoo_node2_create(cylinder, NULL, NULL);
+    dopoo_node2* node4 = dopoo_node2_create(cuboid, NULL, NULL);
 
     // create link
     dopoo_vec3D lineRgb = {0, 1, 0};
     dopoo_link* link = dopoo_link_create(1, 0, lineRgb);
     //dopoo_link_addNode(link, node0);
     //dopoo_link_addNode(link, node1);
-    //dopoo_link_addNode(link, node2);
-    dopoo_link_addNode(link, node3);
+    dopoo_link_addNode(link, node2);
+    //dopoo_link_addNode(link, node3);
+    //dopoo_link_addNode(link, node4);
 
     //create scene
     dopoo_scene* scene = dopoo_scene_create(1);
