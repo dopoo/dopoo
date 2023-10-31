@@ -54,18 +54,23 @@ bool
 dopoo_rayD_intersectSphere(const dopoo_rayD* ray, dopoo_vec3D c, double r, double* t0, double* t1)
 {
     assert(fabs(dopoo_vec3D_lengthSqr(ray->d) - 1) < deltaD);
-    dopoo_vec3D cp = dopoo_vec3D_minus(ray->p, c);
-    double distSqr = dopoo_vec3D_lengthSqr(dopoo_vec3D_cross(cp, ray->d));
+    dopoo_vec3D pc = dopoo_vec3D_minus(c, ray->p);
+    double pp3 = dopoo_vec3D_dot(pc, ray->d);
+    if(pp3 <0)
+        return false;
+    double distSqr = sqrt(dopoo_vec3D_lengthSqr(pc) - pp3 * pp3);
     double rSqr = r * r;
     if(distSqr > rSqr)
         return false;
-    double pp3 = sqrt(dopoo_vec3D_lengthSqr(cp) - distSqr);
+
     double p1p3 = sqrt(rSqr - distSqr);
     double p2p3 = p1p3;
     double pp1 = pp3 - p1p3;
     double pp2 = pp3 + p2p3;
     *t0 = pp1;
     *t1 = pp2;
+    *t0 = max(*t0, ray->t0);
+    *t1 = min(*t1, ray->t1);
     if (*t0 > *t1) return false;
 
     return true;
@@ -75,6 +80,14 @@ bool
 dopoo_rayD_intersectCylinder(const dopoo_rayD* ray, double h, double r, double* t0, double* t1)
 {
     assert(fabs(dopoo_vec3D_lengthSqr(ray->d) - 1) < deltaD);
+    dopoo_vec3D min = {-r, -h/2, -r};
+    dopoo_vec3D max = { r,  h/2,  r};
+    
+    double tb0, tb1;
+    bool interBox = dopoo_rayD_intersectBox(ray, min, max, &tb0, &tb1);
+    if(!interBox)
+        return false;
+
     double px = dopoo_vec3D_getx(ray->p);
     double py = dopoo_vec3D_gety(ray->p);
     double pz = dopoo_vec3D_getz(ray->p);
