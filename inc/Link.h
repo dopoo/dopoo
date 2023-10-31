@@ -13,6 +13,7 @@ typedef struct
     dopoo_mapD map;
     dopoo_list*  nodes;
     dopoo_list* joints;
+    dopoo_list* links;
 }dopoo_link;
 
 bool
