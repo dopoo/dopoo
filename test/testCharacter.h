@@ -40,7 +40,7 @@ dopoo_testCreateCharacter()
     // torso
     double h = 0.4;
     double w0 = waistSize * 2;
-    double w1 = 0.4;
+    double w1 = 0.5;
     double d0 = 0.15;
     double d1 = 0.15;
     dopoo_pyra* torso = dopoo_pyra_create(h, w0, w1, d0, d1, rgb0);
@@ -63,7 +63,7 @@ dopoo_testCreateCharacter()
 
     h = 0.2;
     r0 = waistSize;
-    r1 = 0.2;
+    r1 = 0.3;
     //dopoo_cone* waist = dopoo_cone_create(h, r0, r1, rgb2);
 
     h = 0.2;
@@ -74,12 +74,12 @@ dopoo_testCreateCharacter()
     dopoo_pyra* waist = dopoo_pyra_create(h, w0, w1, d0, d1, rgb2);
 
     //left shoulder
-    h = 0.25;
+    h = 0.35;
     r = 0.05;
     dopoo_cylinder* lshoulder = dopoo_cylinder_create(h, r, rgb3);
 
     //right shoulder
-    h = 0.25;
+    h = 0.35;
     r = 0.05;
     dopoo_cylinder* rshoulder = dopoo_cylinder_create(h, r, rgb3);
 
@@ -116,11 +116,11 @@ dopoo_testCreateCharacter()
     dopoo_cone* rlowerarm = dopoo_cone_create(h, r0, r1, rgb6);
 
     //lShoulderJoint
-    r = 0.05;
+    r = 0.00;
     dopoo_sphere* lshoulderjoint = dopoo_sphere_create(r, rgb5);
 
     //rShoulderJoint
-    r = 0.05;
+    r = 0.0;
     dopoo_sphere* rshoulderjoint = dopoo_sphere_create(r, rgb5);
 
     //lupperarmjoint
@@ -181,21 +181,21 @@ dopoo_testCreateCharacter()
     waist->map.r = dopoo_quatD_create(1, 0, 0, 0);
 
     lshoulder->map.r = dopoo_quatD_create(0, 0, 1, 1);
-    lshoulder->map.t = (dopoo_vec3D){0.18, 0.55, 0};
+    lshoulder->map.t = (dopoo_vec3D){0.23, 0.55, 0};
 
     rshoulder->map.r = dopoo_quatD_create(0, 0, 1, 1);
-    rshoulder->map.t = (dopoo_vec3D){-0.18, 0.55, 0};
+    rshoulder->map.t = (dopoo_vec3D){-0.23, 0.55, 0};
 
-    lupperarm->map.t = (dopoo_vec3D){ 0.30, 0.4, 0};
-    rupperarm->map.t = (dopoo_vec3D){-0.30, 0.4, 0};
+    lupperarm->map.t = (dopoo_vec3D){ 0.35, 0.4, 0};
+    rupperarm->map.t = (dopoo_vec3D){-0.35, 0.4, 0};
 
-    llowerarm->map.t = (dopoo_vec3D){ 0.30, 0.1, 0};
-    rlowerarm->map.t = (dopoo_vec3D){-0.30, 0.1, 0};
+    llowerarm->map.t = (dopoo_vec3D){ 0.35, 0.1, 0};
+    rlowerarm->map.t = (dopoo_vec3D){-0.35, 0.1, 0};
 
-    lshoulderjoint->map.t = (dopoo_vec3D){0.30, 0.55, 0};
-    rshoulderjoint->map.t = (dopoo_vec3D){-0.30, 0.55, 0};
-    lupperarmjoint->map.t = (dopoo_vec3D){0.30, 0.25, 0};
-    rupperarmjoint->map.t = (dopoo_vec3D){-0.30, 0.25, 0};
+    lshoulderjoint->map.t = (dopoo_vec3D){ 0.35, 0.55, 0};
+    rshoulderjoint->map.t = (dopoo_vec3D){-0.35, 0.55, 0};
+    lupperarmjoint->map.t = (dopoo_vec3D){ 0.35, 0.25, 0};
+    rupperarmjoint->map.t = (dopoo_vec3D){-0.35, 0.25, 0};
 
     //render
     dopoo_render_scene(camera, scene);
