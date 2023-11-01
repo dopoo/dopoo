@@ -215,6 +215,61 @@ dopoo_testCreateCharacter()
     r = 0.02;
     dopoo_sphere* reyeball = dopoo_sphere_create(r, rgb23);
 
+    //left wrist
+    h = 0.03;
+    r = 0.1;
+    dopoo_cylinder* lwrist = dopoo_cylinder_create(h, r, rgb15);
+
+    //right wrist
+    h = 0.03;
+    r = 0.1;
+    dopoo_cylinder* rwrist = dopoo_cylinder_create(h, r, rgb15);
+
+    //left finger 00
+    h = 0.05;
+    r = 0.015;
+    dopoo_cylinder* lfinger00 = dopoo_cylinder_create(h, r, rgb15);
+
+    //right finger 00
+    h = 0.05;
+    r = 0.015;
+    dopoo_cylinder* rfinger00 = dopoo_cylinder_create(h, r, rgb15);
+
+    //left finger 01
+    h = 0.05;
+    r0 = 0.01;
+    r1 = 0.015;
+    dopoo_cone* lfinger01 = dopoo_cone_create(h, r0, r1, rgb15);
+
+    //right finger 01
+    h = 0.05;
+    r0 = 0.01;
+    r1 = 0.015;
+    dopoo_cone* rfinger01 = dopoo_cone_create(h, r0, r1, rgb15);
+
+    //left finger 00
+    h = 0.05;
+    r = 0.015;
+    dopoo_cylinder* lfinger10 = dopoo_cylinder_create(h, r, rgb15);
+
+    //right finger 00
+    h = 0.05;
+    r = 0.015;
+    dopoo_cylinder* rfinger10 = dopoo_cylinder_create(h, r, rgb15);
+
+    //left finger 01
+    h = 0.05;
+    r0 = 0.01;
+    r1 = 0.015;
+    dopoo_cone* lfinger11 = dopoo_cone_create(h, r0, r1, rgb15);
+
+    //right finger 01
+    h = 0.05;
+    r0 = 0.01;
+    r1 = 0.015;
+    dopoo_cone* rfinger11 = dopoo_cone_create(h, r0, r1, rgb15);
+
+
     
     //joints
     //lShoulderJoint
@@ -258,6 +313,16 @@ dopoo_testCreateCharacter()
     dopoo_node2* node21 = dopoo_node2_create(leyeball, NULL, NULL);
     dopoo_node2* node22 = dopoo_node2_create(reyeball, NULL, NULL);
     dopoo_node2* node23 = dopoo_node2_create(abdomen, NULL, NULL);
+    dopoo_node2* node24 = dopoo_node2_create(lwrist, NULL, NULL);
+    dopoo_node2* node25 = dopoo_node2_create(rwrist, NULL, NULL);
+    dopoo_node2* node26 = dopoo_node2_create(lfinger00, NULL, NULL);
+    dopoo_node2* node27 = dopoo_node2_create(rfinger00, NULL, NULL);
+    dopoo_node2* node28 = dopoo_node2_create(lfinger01, NULL, NULL);
+    dopoo_node2* node29 = dopoo_node2_create(rfinger01, NULL, NULL);
+    dopoo_node2* node30 = dopoo_node2_create(lfinger10, NULL, NULL);
+    dopoo_node2* node31 = dopoo_node2_create(rfinger10, NULL, NULL);
+    dopoo_node2* node32 = dopoo_node2_create(lfinger11, NULL, NULL);
+    dopoo_node2* node33 = dopoo_node2_create(rfinger11, NULL, NULL);
     
 
     // create joints
@@ -295,7 +360,16 @@ dopoo_testCreateCharacter()
     dopoo_link_addNode(link, node21);
     dopoo_link_addNode(link, node22);
     dopoo_link_addNode(link, node23);
-
+    dopoo_link_addNode(link, node24);
+    dopoo_link_addNode(link, node25);
+    dopoo_link_addNode(link, node26);
+    dopoo_link_addNode(link, node27);
+    dopoo_link_addNode(link, node28);
+    dopoo_link_addNode(link, node29);
+    dopoo_link_addNode(link, node30);
+    dopoo_link_addNode(link, node31);
+    dopoo_link_addNode(link, node32);
+    dopoo_link_addNode(link, node33);
 
     //add joint
     dopoo_link_addJoint(link, joint0);
@@ -311,7 +385,7 @@ dopoo_testCreateCharacter()
     dopoo_scene_addLink(scene, link);
 
     // transform
-    link->map.r = dopoo_quatD_create(0, 1, 0, 1.5);
+    link->map.r = dopoo_quatD_create(0, 1, 0, 4.5);
     torso->map.t = (dopoo_vec3D){0, 0.3, 0};
     abdomen->map.t = (dopoo_vec3D){0, 0.3, 0};
     waist->map.r = dopoo_quatD_create(1, 0, 0, 0);
@@ -342,6 +416,27 @@ dopoo_testCreateCharacter()
 
     llowerarm->map.t = (dopoo_vec3D){ 0.35, 0.1, 0};
     rlowerarm->map.t = (dopoo_vec3D){-0.35, 0.1, 0};
+    
+    lwrist->map.t = (dopoo_vec3D){ 0.35, -0.05, 0};
+    rwrist->map.t = (dopoo_vec3D){-0.35, -0.05, 0};
+
+    lfinger00->map.t = (dopoo_vec3D){ 0.42, -0.09, 0};
+    rfinger00->map.t = (dopoo_vec3D){-0.42, -0.09, 0};
+
+    lfinger01->map.r = dopoo_quatD_create(0, 0, -1, 4);
+    rfinger01->map.r = dopoo_quatD_create(0, 0, 1, 4);
+
+    lfinger01->map.t = (dopoo_vec3D){ 0.41, -0.13, 0};
+    rfinger01->map.t = (dopoo_vec3D){-0.41, -0.13, 0};
+
+    lfinger10->map.t = (dopoo_vec3D){ 0.28, -0.09, 0};
+    rfinger10->map.t = (dopoo_vec3D){-0.28, -0.09, 0};
+
+    lfinger11->map.r = dopoo_quatD_create(0, 0, 1, 4);
+    rfinger11->map.r = dopoo_quatD_create(0, 0, -1, 4);
+
+    lfinger11->map.t = (dopoo_vec3D){ 0.29, -0.13, 0};
+    rfinger11->map.t = (dopoo_vec3D){-0.29, -0.13, 0};
 
     lupperleg->map.t = (dopoo_vec3D){ 0.15, -0.3, 0};
     rupperleg->map.t = (dopoo_vec3D){-0.15, -0.3, 0};
