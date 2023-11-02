@@ -8,7 +8,7 @@ RM          = rm -rf
 RMDIR       = rmdir
 AR          = ar
 
-CFLAGS      := $(RELEASE) -MMD -MP
+CFLAGS      := $(DEBUG) -MMD -MP
 LDFLAGS     :=
 
 LIBTARGET       = libdopoo.a
