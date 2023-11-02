@@ -8,7 +8,7 @@ RM          = rm -rf
 RMDIR       = rmdir
 AR          = ar
 
-CFLAGS      := $(DEBUG) -MMD -MP
+CFLAGS      := $(RELEASE) -MMD -MP
 LDFLAGS     :=
 
 LIBTARGET       = libdopoo.a
@@ -57,7 +57,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 .PHONY: clean
 clean:
-	rm -rf build/obj/doppo/*
+	rm -rf build/obj/dopoo/*
 	rm -rf build/bin/*
 	rm -rf build/lib/*
 
