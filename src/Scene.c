@@ -6,6 +6,7 @@ dopoo_scene_create(int32_t linkSize)
 {
     dopoo_scene* scene = (dopoo_scene*)malloc(sizeof(dopoo_scene));
     scene->links = dopoo_list_create(linkSize);
+    scene->bg = (dopoo_vec3D){0, 0, 0};
     return scene; 
 }
 
@@ -14,6 +15,12 @@ dopoo_scene_clear(dopoo_scene* scene)
 {
     dopoo_list_clear(scene->links);
     free(scene);
+}
+
+void
+dopoo_scene_setBg(dopoo_scene* scene, dopoo_vec3D bg)
+{
+    scene->bg = bg;
 }
 
 void

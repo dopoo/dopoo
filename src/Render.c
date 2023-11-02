@@ -38,7 +38,7 @@ dopoo_render_scene(const dopoo_camera* camera, const dopoo_scene* scene)
             }
             else
             {
-                prgb = (dopoo_vec3D){0, 0, 0};
+                prgb = scene->bg;
             }
             
             (*(camera->film.pixel + j * width + i)) = dopoo_rgbI_fromVec(prgb);
