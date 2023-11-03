@@ -106,7 +106,7 @@ void
 dopoo_prim_clear(void* prim);
 
 bool
-dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* t);
+dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* p, dopoo_vec3D* n, double* t);
 
 dopoo_vec3D
 dopoo_prim_getRgb(void* prim);

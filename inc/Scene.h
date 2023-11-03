@@ -27,7 +27,8 @@ dopoo_link*
 dopoo_scene_getLink(const dopoo_scene* scene, int32_t i);
 
 bool
-dopoo_scene_intersect(const dopoo_scene* scene, dopoo_rayD* ray, int32_t* linkIndex, int32_t* nodeIndex, dopoo_vec3D* n, double* t);
+dopoo_scene_intersect(const dopoo_scene* scene, dopoo_rayD* ray, int32_t* linkIndex, int32_t* nodeIndex, 
+                      dopoo_vec3D* p, dopoo_vec3D* n, double* t);
 
 void
 dopoo_scene_setBg(dopoo_scene* scene, dopoo_vec3D bg);

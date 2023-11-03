@@ -257,7 +257,7 @@ dopoo_pyra_computeNorm(double h, double w0, double w1, double d0, double d1, dop
 }
 
 bool
-dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* t)
+dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* p, dopoo_vec3D* n, double* t)
 {
     dopoo_primitiveType type = *((dopoo_primitiveType*)prim);
     double t0 = 0;
@@ -275,6 +275,7 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
                 dopoo_vec3D p0 = dopoo_rayD_computeP(&lRay, t0);
                 *n = p0;
                 *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(sphere->map), *n));
+                *p = dopoo_mapD_applyRST(&(sphere->map), p0);
                 *t = t0;
                 return true;
             }
@@ -297,6 +298,7 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
                 dopoo_vec3D p0 = dopoo_rayD_computeP(&lRay, t0);
                 *n = dopoo_cylinder_computeNorm(cylinder->h, cylinder->r, p0);
                 *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(cylinder->map), *n));
+                *p = dopoo_mapD_applyRST(&(cylinder->map), p0);
                 *t = t0;
                 return true;
             }
@@ -322,6 +324,7 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
                 dopoo_vec3D p0 = dopoo_rayD_computeP(&lRay, t0);
                 *n = dopoo_cuboid_computeNorm(cuboid->min, cuboid->max, p0);
                 *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(cuboid->map), *n));
+                *p = dopoo_mapD_applyRST(&(cuboid->map), p0);
                 *t = t0;
                 return true;
             }
@@ -345,6 +348,7 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
                 dopoo_vec3D p0 = dopoo_rayD_computeP(&lRay, t0);
                 *n = dopoo_cone_computeNorm(cone->h, cone->r0, cone->r1, p0);
                 *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(cone->map), *n));
+                *p = dopoo_mapD_applyRST(&(cone->map), p0);
                 *t = t0;
                 return true;
             }
@@ -368,6 +372,7 @@ dopoo_prim_intersect(const void* prim, dopoo_rayD* ray, dopoo_vec3D* n, double* 
                 dopoo_vec3D p0 = dopoo_rayD_computeP(&lRay, t0);
                 *n = dopoo_pyra_computeNorm(pyra->h, pyra->w0, pyra->w1, pyra->d0, pyra->d1, p0);
                 *n = dopoo_vec3D_norm(dopoo_mapD_applyRS(&(pyra->map), *n));
+                *p = dopoo_mapD_applyRST(&(pyra->map), p0);
                 *t = t0;
                 return true;
             }

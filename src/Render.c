@@ -17,23 +17,29 @@ dopoo_render_scene(const dopoo_camera* camera, const dopoo_scene* scene)
     int32_t linkIndex;
     int32_t nodeIndex;
 
+    dopoo_vec3D cameraPos = camera->map.t;
     for (int32_t j=0; j < height; ++j) {
         for (int32_t i=0; i < width; ++i) {
             double x = 0; 
             double y = 0;
             dopoo_camera_getRay(camera, &ray, i, j, x, y);
+            dopoo_vec3D p;
             dopoo_vec3D n;
             double t;
-            if(dopoo_scene_intersect(scene, &ray, &linkIndex, &nodeIndex, &n, &t))
+            if(dopoo_scene_intersect(scene, &ray, &linkIndex, &nodeIndex, &p, &n, &t))
             {
                 dopoo_link* link = dopoo_scene_getLink(scene, linkIndex);
                 if(t < LINETIME)
                 {
-                    double z = dopoo_vec3D_getz(n);
                     dopoo_vec3D rgb = dopoo_link_getRgb(link, nodeIndex);
-                    prgb = dopoo_vec3D_scale(rgb, z);
+                    //double z = dopoo_vec3D_getz(n);
+                    //prgb = dopoo_vec3D_scale(rgb, z);
+                    
+                    dopoo_vec3D wi = dopoo_vec3D_norm(dopoo_vec3D_minus(cameraPos, p));
+                    double cosTheta = dopoo_vec3D_dot(wi, n);
+                    prgb = dopoo_vec3D_scale(rgb, cosTheta);
                 }
-                else
+                else if (link->drawBorderLine)
                     prgb = dopoo_link_getLineRgb(link);
             }
             else

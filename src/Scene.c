@@ -36,22 +36,25 @@ dopoo_scene_getLink(const dopoo_scene* scene, int32_t i)
 }
 
 bool
-dopoo_scene_intersect(const dopoo_scene* scene, dopoo_rayD* ray, int32_t* linkIndex, int32_t* nodeIndex, dopoo_vec3D* n, double* t)
+dopoo_scene_intersect(const dopoo_scene* scene, dopoo_rayD* ray, int32_t* linkIndex, int32_t* nodeIndex,
+                      dopoo_vec3D* p, dopoo_vec3D* n, double* t)
 {
     *t = DBL_MAX;
     double t0 = DBL_MAX;
+    dopoo_vec3D p0 = {0, 0, 0};
     dopoo_vec3D n0 = {0, 0, 0};
     bool intersect = false;
     for(int32_t i = 0; i < scene->links->size; i++)
     {
         dopoo_link* link = (dopoo_link*)(scene->links->data[i]);
-        if(dopoo_link_intersect(link, ray, nodeIndex, &n0, &t0))
+        if(dopoo_link_intersect(link, ray, nodeIndex, &p0, &n0, &t0))
         {
             intersect = true;
             if(*t > t0)
             {
                 *t = t0;
                 *n = n0;
+                *p = p0;
                 *linkIndex = i;
             }
         }
