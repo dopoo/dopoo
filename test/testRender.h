@@ -18,10 +18,10 @@ dopoo_testRenderLink()
     // create camera
     dopoo_quatD q = dopoo_quatD_create(0, 0, 0, 1);
     dopoo_vec3D t = {0, 0, 2};
-    dopoo_camera* camera = dopoo_camera_create(HRESOLUTION, VRESOLUTION, q, t, ORTHOGRAPHICCAMERA);
+    dopoo_camera* camera = dopoo_camera_create(HRESOLUTION, VRESOLUTION, q, t, PERSPECTIVECAMERA);
 
     // create sphere
-    double r = 0.3;
+    double r = 0.5;
     dopoo_vec3D rgb = {1, 0, 1};
     dopoo_sphere* sphere = dopoo_sphere_create(r, rgb);
 
@@ -37,6 +37,7 @@ dopoo_testRenderLink()
     r = 0.5;
     rgb = (dopoo_vec3D){1, 0, 1};
     dopoo_cylinder* cylinder = dopoo_cylinder_create(h, r, rgb);
+    cylinder->map.r =  dopoo_quatD_create(1, 0, 0, 1);
 
     // create pyra
     h = 1;
@@ -64,6 +65,7 @@ dopoo_testRenderLink()
     // create link
     dopoo_vec3D lineRgb = {0, 1, 0};
     dopoo_link* link = dopoo_link_create(1, 0, lineRgb);
+    link->drawBorderLine = false;
     //dopoo_link_addNode(link, node0);
     //dopoo_link_addNode(link, node1);
     dopoo_link_addNode(link, node2);
@@ -75,11 +77,11 @@ dopoo_testRenderLink()
     dopoo_scene_addLink(scene, link);
 
     // transform
-    pyra->map.r = dopoo_quatD_create(1, 0, 1, 0.25);
-    pyra->map.t = (dopoo_vec3D){-0.3, 0, 0};
-    cone->map.r = dopoo_quatD_create(-1, 0, 0, 0.3);
-    cone->map.t = (dopoo_vec3D){-0.3, 0, 3};
-    cylinder->map.t = (dopoo_vec3D){-0.3, 0, 1};
+    //pyra->map.r = dopoo_quatD_create(1, 0, 1, 0.25);
+    //pyra->map.t = (dopoo_vec3D){-0.3, 0, 0};
+    //cone->map.r = dopoo_quatD_create(-1, 0, 0, 0.3);
+    //cone->map.t = (dopoo_vec3D){-0.3, 0, 3};
+    //cylinder->map.t = (dopoo_vec3D){-0.3, 0, 1};
 
     //render
     dopoo_render_scene(camera, scene);
